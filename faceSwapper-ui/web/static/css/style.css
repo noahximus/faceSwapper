@@ -1,0 +1,210 @@
+/* Body and Layout */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 0px;
+    line-height: 1.6;
+    font-size: 18px;
+}
+
+/* Main Container */
+.container, .file-upload-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    /*justify-content: center;*/
+    align-items: center;
+    /*flex-direction: column;*/
+    min-height: 40vh;
+    padding-bottom: 20px;
+}
+
+/* Headers */
+h1 {
+    font-size: 36px;
+    color: #222;
+    text-align: center;
+    margin-bottom: 5px;
+    font-weight: 300;
+}
+
+/* Upload Sections */
+.file-upload-section, .upload-section {
+    width: 45%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /*align-items: flex-start;  /* Align the items to the top */*/
+    align-items: center;
+}
+
+label {
+    display: block;
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+input[type="file"] {
+    display: block;
+    margin: 10px auto 20px auto;
+}
+
+/* Button Styling */
+button {
+    background-color: #007aff;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 122, 255, 0.2);
+    transition: background-color 0.3s ease;
+    margin: 10px;
+}
+
+button:hover {
+    background-color: #005bb5;
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Style for individual galleries */
+.gallery {
+    margin: 0 10px; /* Add margin to create space between galleries */
+}
+
+/* Gallery and Image Preview */
+.preview-container {
+    display: flex;
+    justify-content: center; /* space-between;*/
+    margin-top: 20px;
+}
+
+.preview-container img {
+    width: 100%;
+    height: auto;
+    margin: 5px;
+}
+
+/* Horizontal layout for the gallery containers */
+.gallery-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: flex-start;  /* Align the items to the top */
+    gap: 20px;                /* Add spacing between the source and target galleries */
+}
+
+/* Vertical layout for the image-container inside each gallery */
+.image-container {
+    display: flex;
+    flex-direction: column;   /* Makes content inside image-container stack vertically */
+    align-items: center;      /* Center items horizontally inside the container */
+    /*margin: 2px;*/
+    /*border: 1px solid #ddd;*/
+    padding: 2px;
+    flex-grow: 1;             /* Allow image-containers to grow equally */
+}
+
+/* If you want a specific width for each gallery (optional) */
+.source-gallery, .target-gallery {
+    display: flex;
+    flex-basis: 45%;          /* Each gallery takes 45% of the available space */
+    flex-direction: column;   /* Makes content inside image-container stack vertically */
+}
+
+.image-container img {
+    /*width: 100%;*/
+    width: 4vw;
+    height: auto; /* Keep the aspect ratio */
+}
+
+.image-filename {
+    font-size: 10px;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+/* Status Bar for Messages */
+#message {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    width: 90%;
+    margin: 0 auto;
+    right: 0;
+    background-color: #dff0d8;
+    color: #3c763d;
+    border: 1px solid #d6e9c6;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 8px;
+    text-align: center;
+    display: none;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+#message.visible {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+
+#message.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    color: #777;
+    font-size: 14px;
+    border-top: 1px solid #ddd;
+}
+
+/* Styles for the ssing buttons */
+.processing-controls-container {
+    margin-top: 30px;
+    text-align: center;
+}
+
+/* Responsive Layout */
+@media screen and (max-width: 768px) {
+    .file-upload-container, .preview-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .file-upload-section {
+        width: 100%;
+    }
+    
+    h1 {
+        font-size: 28px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+}
