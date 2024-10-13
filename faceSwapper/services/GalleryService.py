@@ -5,8 +5,8 @@ import cv2
 from io import BytesIO
 import base64
 
-from visuals.facial.analyzer.Analyzer import Analyzer as Analyzer
-from visuals.facial.swapper.Swapper import Swapper as Swapper
+from faceSwapper.model.Analyzer import Analyzer
+from faceSwapper.model.Swapper import Swapper
 
 ANALYZER = Analyzer.FACE_ANALYZER
 SWAPPER = Swapper.get_face_swapper()

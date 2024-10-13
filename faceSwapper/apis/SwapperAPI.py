@@ -32,6 +32,9 @@ def faceSwap() -> Tuple[Response, int]:
         if not source_file or not target_file:
             returned_result = jsonify({'error': 'Source and target files are required!'}), 400
 
+        source_file_Name = request.form.get('sourceFileName')
+        target_file_Name = request.form.get('targetFileName')
+
         # Access the gallery faces data (sent as JSON strings)
         source_gallery_order = request.form.get('sourceGalleryOrder')
         target_gallery_order = request.form.get('targetGalleryOrder')
@@ -51,7 +54,9 @@ def faceSwap() -> Tuple[Response, int]:
 
         # Perform face swapping using the files and faces
         try:
-            result = SwapperService.swap_faces(source_file, target_file, source_gallery_order, target_gallery_order)
+            result = SwapperService.swap_faces(
+                source_file, source_file_Name, source_gallery_order,
+                target_file, target_file_Name, target_gallery_order)
             returned_result = jsonify({ 'swapped_image': f'{result}' }), 200
         except Exception as e:
             returned_result = jsonify({'error': f'Face swapping failed: {str(e)}'}), 500

@@ -14,16 +14,15 @@ from flask_cors import CORS  # Import CORS
 
 # from datetime import datetime
 
-from dotenv import find_dotenv
-from dotenv import load_dotenv
 # from numpy import swapaxes
 
 # from commons.utils.CommonUtils import 
-from visuals.commons import CommonConfig
-from visuals.facial.swapper.SwapperAPI import swapperAPI_routes
-from visuals.uploads.UploadsAPI import uploadsAPI_routes
+from faceSwapper.commons.config import CommonConfig
 
-from visuals.Manipulator import Manipulator
+from faceSwapper.apis.SwapperAPI import swapperAPI_routes
+from faceSwapper.apis.UploadsAPI import uploadsAPI_routes
+
+from faceSwapper.model.Manipulator import Manipulator
 
 logging.root.setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)

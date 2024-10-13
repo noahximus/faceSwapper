@@ -7,8 +7,8 @@ from typing import Any
 
 # import cv2
 
-import visuals.commons.CommonConfig as CommonConfig
-import visuals.commons.utils.FileUtils as FileUtils
+from faceSwapper.commons.config import CommonConfig
+from faceSwapper.commons.utils import FileUtils
 
 logging.root.setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -51,9 +51,9 @@ class Swapper:
 
             Swapper.FACE_SWAPPER = insightface.model_zoo.get_model(
                 str(CommonConfig.SWAPPER_MODEL_PATH)
-                # , providers=['CoreMLExecutionProvider', 'AzureExecutionProvider', 'CPUExecutionProvider']
+                , providers=['CoreMLExecutionProvider', 'AzureExecutionProvider', 'CPUExecutionProvider']
                 # , providers=['CPUExecutionProvider'] # 8.35473895072937 secs - Blurred
-                , providers=['CoreMLExecutionProvider'] # 8.8892662525177 secs
+                # , providers=['CoreMLExecutionProvider'] # 8.8892662525177 secs
             )
         return Swapper.FACE_SWAPPER
     

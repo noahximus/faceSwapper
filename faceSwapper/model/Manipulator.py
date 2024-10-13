@@ -1,18 +1,7 @@
 import sys
 import logging
 import shutil
-import json
 import threading
-
-# from typing import Any, List
-# import cv2
-# import insightface
-
-
-from visuals.facial.swapper.Swapper import Swapper
-
-import visuals.commons.CommonConfig as CommonConfig
-import visuals.commons.utils.FileUtils as FileUtils
 
 FACE_SWAPPER = None
 THREAD_LOCK = threading.Lock()
@@ -23,20 +12,11 @@ logger = logging.getLogger(__name__)
 
 class Manipulator:
 
-    # swapper = 
-
     def __init__(self):
         
         logger.debug(f'START')
 
-        # swapper = Swapper()
-        # swapper.pre_check()
-
-        # if self.pre_check():
-        #     logger.info(f'  ALL OK')
-            
         logger.debug(f'END')
-
 
     def pre_check(self):
         message = 'Pre-check is successful.'

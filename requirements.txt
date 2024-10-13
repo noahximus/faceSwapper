@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+pydantic
+python-multipart
+pillow
+numpy
+opencv-python
+insightface
+onnxruntime
+flask
+flask-cors
+pyinstaller

@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
 from typing import Tuple
 
-from faceSwapper.commons.config import CommonConfig 
+from faceSwapper.commons.config import CommonConfig
 from faceSwapper.commons.utils import FileUtils
 from faceSwapper.commons.utils import MediaUtils
 
