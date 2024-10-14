@@ -62,10 +62,7 @@ def faceSwap() -> Tuple[Response, int]:
                 target_file, target_file_Name, target_gallery_order)
             logger.debug(f"Done with SWAPPING")
             
-            result = EnhancerService.enhance_image(result)
-            logger.debug(f"Done with ENHANCING")
-
-            returned_result = jsonify({ 'swapped_image': f'{result}' }), 200
+            returned_result = jsonify({ 'image': f'{result}' }), 200
         except Exception as e:
             logger.error(f'Face swapping failed: {str(e)}')
             returned_result = jsonify({'error': f'Face swapping failed: {str(e)}'}), 500

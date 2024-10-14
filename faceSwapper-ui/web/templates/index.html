@@ -10,19 +10,19 @@
     <h1>Image Gallery (Source and Target)</h1>
 
     <div class="file-upload-container">
-        
+
         <div class="file-upload-section">
             <label for="source">Source</label>
             <input type="file" id="source" multiple>
             <div class="preview-container" id="sourcePreview"></div>
             <p id="sourceFilename"></p>
         </div>
-        
+
         <div class="gallery-container">
             <div class="source-gallery" id="sourceGallery"></div>
             <div class="target-gallery" id="targetGallery"></div>
         </div>
-        
+
         <div class="file-upload-section">
             <label for="target">Target</label>
             <input type="file" id="target" multiple>
@@ -31,26 +31,36 @@
         </div>
     </div>
 
-    <div class="preview-container" id="resultsPreview"></div>
- 
-    <!-- Message section -->
-    <div id="message" class="hidden"></div>
+    <div class="results-container">
+        <div class="results-preview-container" id="swappedResult"></div>
+        <div class="results-preview-container" id="enhancedResult"></div>
+    </div>
 
     <div class="processing-controls-container">
       <button id="swapFaces">Swap Faces</button>
+      <button id="enhance">Enhance</button>
     </div>
-    
+
+    <!-- Message section -->
+    <div id="message" class="hidden"></div>
+
+    <!-- Spinner Loading Indicator -->
+    <div id="loadingSpinner"></div>
+
     <footer>
         © 2024 Visual Manipulation Website | All Rights Reserved
     </footer>
 
     <!-- Load the new consolidated script -->
-    <script src="{{ url_for('static', filename='js/gallery-management.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='js/swapper.js') }}" defer></script>
+    <script type=module src="{{ url_for('static', filename='js/commons.js') }}" defer></script>
+    <script type=module src="{{ url_for('static', filename='js/gallery.js') }}" defer></script>
+    <script type=module src="{{ url_for('static', filename='js/swapper.js') }}" defer></script>
+    <script type=module src="{{ url_for('static', filename='js/enhancer.js') }}" defer></script>
 
     <script>
         const apiUrlForUploads = "{{ apiUrlForUploads }}";
         const apiUrlForFaceSwap = "{{ apiUrlForFaceSwap }}";
+        const apiUrlForEnhance = "{{ apiUrlForEnhance }}";
     </script>
 </body>
 </html>

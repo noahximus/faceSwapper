@@ -24,7 +24,7 @@ UPLOAD_URL =  CONFIGURATION['application']['upload']['url']
 UPLOADS_URL =  CONFIGURATION['application']['upload']['uploads']['url']
 
 FACESWAP_URL = CONFIGURATION['application']['swapper']['face_swap']['url']
-FACEEXTRACT_URL = CONFIGURATION['application']['swapper']['face_swap']['url']
+ENHANCE_URL = CONFIGURATION['application']['enhancer']['enhance']['url']
 
 ALLOWED_UPLOAD_FILE_EXTENSIONS = CONFIGURATION['application']['upload']['allowed_extensions']
 

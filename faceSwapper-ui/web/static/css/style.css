@@ -42,7 +42,6 @@ h1 {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /*align-items: flex-start;  /* Align the items to the top */*/
     align-items: center;
 }
 
@@ -207,4 +206,51 @@ footer {
         font-size: 14px;
         padding: 10px 15px;
     }
+}
+
+/* Basic styles for the loading spinner */
+#loadingSpinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 8px solid #f3f3f3; /* Light gray background */
+    border-top: 8px solid #3498db; /* Blue top border to create the spinning effect */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite; /* Spin animation */
+    display: none; /* Hidden by default */
+}
+
+/* Keyframes for spinner animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Container for the image previews */
+.results-container {
+    display: flex; /* Flexbox to align images side by side */
+    justify-content: space-between; /* Add space between the images */
+    align-items: center; /* Align images vertically centered if their sizes differ */
+    gap: 20px; /* Gap between the two image containers */
+    max-width: 100%; /* Make sure the container doesn't exceed the width of the page */
+}
+
+/* Styling for individual image preview containers */
+.results-preview-container {
+    flex: 1; /* Make the containers flexible to share the space equally */
+    max-width: 50%; /* Make sure each container takes up no more than half of the width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Hide overflow if image is too big */
+}
+
+/* Ensure images fit within their containers and are similarly sized */
+.results-preview-container img {
+    max-width: 100%; /* Image should not exceed the container's width */
+    max-height: 100%; /* Image should not exceed the container's height */
+    object-fit: contain; /* Ensure the image keeps its aspect ratio and is fully visible */
 }

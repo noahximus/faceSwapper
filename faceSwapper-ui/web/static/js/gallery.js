@@ -1,29 +1,15 @@
-// ================================
-// Show message functionality (from commons.js)
-// ================================
-function showMessage(text, success = true) {
-    const messageElement = document.getElementById('message');
-    messageElement.textContent = text;
-    messageElement.style.backgroundColor = success ? '#dff0d8' : '#f2dede'; // Green or red
-    messageElement.style.color = success ? '#3c763d' : '#a94442'; // Text color based on success
-    messageElement.classList.remove('hidden');
-    messageElement.classList.add('visible');
-
-    setTimeout(() => {
-        messageElement.classList.remove('visible');
-        messageElement.classList.add('hidden');
-    }, 5000);
-}
+// commons.js
+import * as commons from "./commons.js";
 
 // ================================
 // Upload functionality (from upload.js)
 // ================================
-async function uploadFile(inputId, uploadType) {
+export async  function uploadFile(inputId, uploadType) {
     const fileInput = document.getElementById(inputId);
     const file = fileInput.files[0];
 
     if (!file) {
-        showMessage(`Please upload a ${uploadType} file.`, false);
+        commons.showMessage(`Please upload a ${uploadType} file.`, false);
         return;
     }
 
@@ -39,7 +25,7 @@ async function uploadFile(inputId, uploadType) {
 
         const result = await response.json();
         if (response.status === 200) {
-            showMessage(`${uploadType.charAt(0).toUpperCase() + uploadType.slice(1)} uploaded successfully!`, true);
+            commons.showMessage(`${uploadType.charAt(0).toUpperCase() + uploadType.slice(1)} uploaded successfully!`, true);
             loadImagesFromApiResult(`${uploadType}Gallery`, result.faces);
         } else {
             showMessage(`Upload failed: ${result.error}`, false);
@@ -48,30 +34,10 @@ async function uploadFile(inputId, uploadType) {
         showMessage(`Error uploading ${uploadType}: ${error.message}`, false);
     }
 }
-
-// ================================
-// Show image previews
-// ================================
-function showPreviews(fileInput, previewContainer) {
-    const files = Array.from(fileInput.files);
-    previewContainer.innerHTML = ''; // Clear previous previews
-
-    files.forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-            const img = document.createElement('img');
-            img.src = event.target.result;
-            img.style.margin = '5px';
-            previewContainer.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-    });
-}
-
 // ================================
 // Gallery handling (from gallery.js)
 // ================================
-function loadImagesFromInput(divId, fileInput) {
+export function loadImagesFromInput(divId, fileInput) {
     const galleryDiv = document.getElementById(divId);
     const files = Array.from(fileInput.files);
     galleryDiv.innerHTML = ''; 
@@ -86,7 +52,7 @@ function loadImagesFromInput(divId, fileInput) {
     equalizeHeightsAcrossGalleries();
 }
 
-function loadImagesFromApiResult(divId, faces) {
+export function loadImagesFromApiResult(divId, faces) {
     console.log('loadImagesFromApiResult')
     const galleryDiv = document.getElementById(divId);  // Get the div by its ID
     galleryDiv.innerHTML = '';  // Clear any existing images in the gallery
@@ -100,7 +66,7 @@ function loadImagesFromApiResult(divId, faces) {
     equalizeHeightsAcrossGalleries();
 }
 
-function handleImageLoad(imgSrc, faceName, index, galleryDiv) {
+export function handleImageLoad(imgSrc, faceName, index, galleryDiv) {
     const img = document.createElement('img');
     img.src = imgSrc;
     img.alt = faceName;
@@ -116,7 +82,7 @@ function handleImageLoad(imgSrc, faceName, index, galleryDiv) {
     galleryDiv.appendChild(imageContainer);
 }
 
-function makeImagesDraggable(containerId) {
+export function makeImagesDraggable(containerId) {
     let draggedElement = null;
 
     document.getElementById(containerId).addEventListener('dragstart', (event) => {
@@ -168,7 +134,7 @@ function makeImagesDraggable(containerId) {
 // ================================
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('source').addEventListener('change', function(event) {
-        showPreviews(this, document.getElementById('sourcePreview'));
+        commons.showPreviews(this, document.getElementById('sourcePreview'));
         uploadFile(event.target.id, 'source');
         const files = event.target.files;
         const filenameDisplay = document.getElementById('sourceFilename');
@@ -176,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.getElementById('target').addEventListener('change', function(event) {
-        showPreviews(this, document.getElementById('targetPreview'));
+        commons.showPreviews(this, document.getElementById('targetPreview'));
         uploadFile(event.target.id, 'target');
         const files = event.target.files;
         const filenameDisplay = document.getElementById('targetFilename');
@@ -188,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Function to extract the current order of images from a given container
-function getImageOrder(containerElement) {
+export function getImageOrder(containerElement) {
     const order = [];
     // Query the image containers inside the provided element
     containerElement.querySelectorAll('.image-container').forEach(container => {
@@ -206,21 +172,7 @@ function getImageOrder(containerElement) {
     });
     return order;
 }
-
-function showBase64Previews(base64String, previewContainer) {
-    previewContainer.innerHTML = ''; // Clear existing previews
-
-    // base64Images.forEach((base64String) => {
-    const img = document.createElement('img');
-    img.src = base64String;  // Set the image source to the base64 string
-    // img.style.margin = '5px'; // Add some margin between images
-    img.style.maxWidth = '100vp'; // Optional: Limit the size of the preview images
-    // img.style.maxHeight = '150px'; 
-    previewContainer.appendChild(img); // Append the preview image to the container
-    // });
-}
-
-function equalizeHeightsAcrossGalleries() {
+export function equalizeHeightsAcrossGalleries() {
     const containers = document.querySelectorAll('.source-gallery .image-container, .target-gallery .image-container');
     let maxHeight = 0;
 
