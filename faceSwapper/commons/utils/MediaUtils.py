@@ -84,3 +84,39 @@ def convert_file_to_cv2_image(file_data):
         np_array = np.frombuffer(file_data.read(), np.uint8)
         img = cv2.imdecode(np_array, cv2.IMREAD_COLOR)
     return img
+
+def convert_to_base64(image):
+    _, buffer = cv2.imencode('.jpg', image)
+    img_base64 = base64.b64encode(buffer).decode('utf-8')
+    return f"data:image/jpeg;base64,{img_base64}"
+
+def base64_to_numpy_1(base64_string):
+    # Decode the base64 string to bytes
+    image_bytes = base64.b64decode(base64_string)
+    
+    # Convert bytes to a NumPy array (image)
+    np_arr = np.frombuffer(image_bytes, np.uint8)
+    
+    # Decode the image (assuming it's in JPEG/PNG format)
+    image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+    
+    return image
+
+def base64_to_numpy(base64_string):
+    # Remove header if present
+    if "base64," in base64_string:
+        base64_string = base64_string.split(",")[1]
+    
+    # Decode the base64 string to bytes
+    image_bytes = base64.b64decode(base64_string)
+    
+    # Convert bytes to a NumPy array (image)
+    np_arr = np.frombuffer(image_bytes, np.uint8)
+    
+    # Decode the image
+    image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+    
+    if image is None:
+        raise ValueError("Image decoding failed")
+    
+    return image

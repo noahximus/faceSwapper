@@ -6,7 +6,8 @@ from flask import Blueprint, jsonify, request, Response
 from flask_cors import CORS  # Import CORS
 from typing import Tuple
 
-from faceSwapper.services import SwapperService as SwapperService
+from faceSwapper.services import SwapperService
+from faceSwapper.services import EnhancerService
 
 logging.root.setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -30,6 +31,7 @@ def faceSwap() -> Tuple[Response, int]:
         target_file = request.files.get('targetFile')
 
         if not source_file or not target_file:
+            logger.error(f'Source and target files are required!')
             returned_result = jsonify({'error': 'Source and target files are required!'}), 400
 
         source_file_Name = request.form.get('sourceFileName')
@@ -46,6 +48,7 @@ def faceSwap() -> Tuple[Response, int]:
             if target_gallery_order:
                 target_gallery_order = json.loads(target_gallery_order)
         except json.JSONDecodeError as e:
+            logger.error(f'Source and target files are required!')
             returned_result = jsonify({'error': f'Invalid JSON in gallery faces: {str(e)}'}), 400
 
         # Log received files and data for debugging
@@ -57,11 +60,18 @@ def faceSwap() -> Tuple[Response, int]:
             result = SwapperService.swap_faces(
                 source_file, source_file_Name, source_gallery_order,
                 target_file, target_file_Name, target_gallery_order)
+            logger.debug(f"Done with SWAPPING")
+            
+            result = EnhancerService.enhance_image(result)
+            logger.debug(f"Done with ENHANCING")
+
             returned_result = jsonify({ 'swapped_image': f'{result}' }), 200
         except Exception as e:
+            logger.error(f'Face swapping failed: {str(e)}')
             returned_result = jsonify({'error': f'Face swapping failed: {str(e)}'}), 500
 
     except Exception as e:
+        logger.error(f'{str(e)}')
         returned_result = jsonify({'error': str(e)}), 500
 
     logger.debug(f'FaceSwap DONE: ({time.time() - start_time} secs)')

@@ -44,17 +44,15 @@ class Swapper:
 
     @staticmethod
     def __load_model() -> Any:
-        # with Swapper.__THREAD_LOCK:
-        if Swapper.FACE_SWAPPER is None:
-
-            logger.info(f'Swapper model path: {FileUtils.resolve_relative_path(CommonConfig.SWAPPER_MODEL_PATH)}')
-
-            Swapper.FACE_SWAPPER = insightface.model_zoo.get_model(
-                str(CommonConfig.SWAPPER_MODEL_PATH)
-                , providers=['CoreMLExecutionProvider', 'AzureExecutionProvider', 'CPUExecutionProvider']
-                # , providers=['CPUExecutionProvider'] # 8.35473895072937 secs - Blurred
-                # , providers=['CoreMLExecutionProvider'] # 8.8892662525177 secs
-            )
+        with Swapper.__THREAD_LOCK:
+            if Swapper.FACE_SWAPPER is None:
+                logger.info(f'Swapper model path: {FileUtils.resolve_relative_path(CommonConfig.SWAPPER_MODEL_PATH)}')
+                Swapper.FACE_SWAPPER = insightface.model_zoo.get_model(
+                    str(CommonConfig.SWAPPER_MODEL_PATH)
+                    , providers=['CoreMLExecutionProvider', 'AzureExecutionProvider', 'CPUExecutionProvider']
+                    # , providers=['CPUExecutionProvider'] # 8.35473895072937 secs - Blurred
+                    # , providers=['CoreMLExecutionProvider'] # 8.8892662525177 secs
+                )
         return Swapper.FACE_SWAPPER
     
     @staticmethod
