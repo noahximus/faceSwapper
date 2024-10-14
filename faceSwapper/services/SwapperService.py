@@ -1,9 +1,12 @@
-import logging
+import os
 import cv2
 import base64
-import os
+import logging
 
 import concurrent.futures
+import numpy as np
+
+from typing import Tuple, List
 
 from faceSwapper.commons.config import CommonConfig
 from faceSwapper.model.Analyzer import Analyzer
@@ -26,8 +29,11 @@ sampleTargetImages = [
     "data:image/jpeg;base64,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",
 ]
 
+
 # Externalized function to swap a single pair of faces
-def swap_single_face(i, source_faces, target_faces, sourceGalleryOrder, targetGalleryOrder, result):
+def swap_single_face(
+    i, source_faces, target_faces, sourceGalleryOrder, targetGalleryOrder, result
+):
     """Swaps a single pair of faces between the source and target."""
     source_face = source_faces[int(sourceGalleryOrder[i])]
     target_face = target_faces[int(targetGalleryOrder[i])]
@@ -42,69 +48,12 @@ def swap_single_face(i, source_faces, target_faces, sourceGalleryOrder, targetGa
         logger.error(f'Face swapping failed for [{i}]: {str(e)}')
         return None
 
-# Function for swapping faces using the InsightFace swapper model
-def swap_faces_sync(
-    source_file, source_file_name, source_gallery_order,
-    target_file, target_file_name, target_gallery_order,
-    use_process_pool=False
-) -> str:
 
-    """Perform face swapping between source and target image."""
-    # Convert files to OpenCV images
-    # source_img = MediaUtils.convert_file_to_cv2_image(source_file)
-    # target_img = MediaUtils.convert_file_to_cv2_image(target_file)
+def process_face_swap(
+    source_file_name, target_file_name, source_gallery_order, target_gallery_order,
+) -> Tuple[np.ndarray, List[int], List[int], int]:
 
-    source_file_path = CommonConfig.TARGETS_UPLOADS_DIR.joinpath(source_file_name)
-    target_file_path = CommonConfig.TARGETS_UPLOADS_DIR.joinpath(target_file_name)
-
-    source_img = cv2.imread(str(source_file_path))
-    target_img = cv2.imread(str(target_file_path))
-
-    # Detect faces in both source and target images
-    source_faces = ANALYZER.get(source_img)
-    source_faces = sorted(source_faces, key = lambda x : x.bbox[0])
-    target_faces = ANALYZER.get(target_img)
-    target_faces = sorted(target_faces, key = lambda x : x.bbox[0])
-
-    if not source_faces or not target_faces:
-        raise ValueError("No faces detected in one or both images.")
-
-    faceCountToSwap = min(len(source_gallery_order), len(target_gallery_order))
-    logger.debug(f'faceCountToSwap is {faceCountToSwap}')
-    logger.debug(f'sourceGalleryOrder is {source_gallery_order}')
-    logger.debug(f'targetGalleryOrder is {target_gallery_order}')
-
-    result = target_img
-    for i in range(faceCountToSwap):
-        logger.debug(f'sourceGalleryOrder[{i}] is {source_gallery_order[i]}')
-        logger.debug(f'targetGalleryOrder[{i}] is {target_gallery_order[i]}')
-
-        # Call the externalized swap_single_face function for each pair of faces
-        swapped_result = swap_single_face(i, source_faces, target_faces, source_gallery_order, target_gallery_order, result)
-        
-        if swapped_result is not None:
-            result = swapped_result  # Update the result image with the latest swap
-        else:
-            logger.error(f'Skipping face [{i}] due to error during face swapping')
-
-    # Optionally return a base64-encoded string for frontend rendering
-    _, buffer = cv2.imencode('.jpg', result)
-    result_base64 = base64.b64encode(buffer).decode('utf-8')
-
-    return f"data:image/jpeg;base64,{result_base64}"
-
-
-# Function for swapping faces using either ThreadPoolExecutor or ProcessPoolExecutor
-def swap_faces_async(
-    source_file, source_file_name, source_gallery_order,
-    target_file, target_file_name, target_gallery_order,
-    use_process_pool=False
-) -> str:
-
-    """Perform face swapping between source and target image using a specified executor."""
-    # Convert files to OpenCV images
-    # source_img = MediaUtils.convert_file_to_cv2_image(source_file)
-    # target_img = MediaUtils.convert_file_to_cv2_image(target_file)
+    """Common logic for face swapping between source and target images."""
 
     source_file_path = CommonConfig.TARGETS_UPLOADS_DIR.joinpath(source_file_name)
     target_file_path = CommonConfig.TARGETS_UPLOADS_DIR.joinpath(target_file_name)
@@ -121,61 +70,84 @@ def swap_faces_async(
     if not source_faces or not target_faces:
         raise ValueError("No faces detected in one or both images.")
 
-    faceCountToSwap = min(len(source_gallery_order), len(target_gallery_order))
-    logger.debug(f'faceCountToSwap is {faceCountToSwap}')
+    face_count_to_swap = min(len(source_gallery_order), len(target_gallery_order))
+    logger.debug(f'faceCountToSwap is {face_count_to_swap}')
     logger.debug(f'sourceGalleryOrder is {source_gallery_order}')
     logger.debug(f'targetGalleryOrder is {target_gallery_order}')
 
+    return target_img, source_faces, target_faces, face_count_to_swap
+
+
+def swap_faces_async(
+    source_file_name, source_gallery_order,
+    target_file_name, target_gallery_order,
+    use_process_pool=False
+) -> str:
+
+    """Perform face swapping between source and target images, either synchronously or asynchronously."""
+    
+    target_img, source_faces, target_faces, face_count_to_swap = process_face_swap(
+        source_file_name, target_file_name, source_gallery_order, target_gallery_order
+    )
     result = target_img
 
-    # Choose the appropriate executor
-    if use_process_pool:
-        cpu_cores = os.cpu_count()  # Get the number of available CPU cores
-        logger.debug(f'Using ProcessPoolExecutor with {cpu_cores} cores')
-        # ProcessPoolExecutor uses max_workers
-        executor_class = concurrent.futures.ProcessPoolExecutor
-        executor_args = {'max_workers': cpu_cores}
-    else:
-        logger.debug(f'Using ThreadPoolExecutor')
-        # ThreadPoolExecutor doesn't need max_workers unless specified explicitly
-        executor_class = concurrent.futures.ThreadPoolExecutor
-        executor_args = {}
+    # If use_process_pool is set to True, use ProcessPoolExecutor, otherwise use ThreadPoolExecutor
+    executor_class, executor_args = choose_executor(use_process_pool)
 
-    # Process each face swap in parallel using the chosen executor
+    # Process each face swap using the chosen executor (Thread or Process Pool)
     with executor_class(**executor_args) as executor:
-        futures = [executor.submit(swap_single_face, i,
-                                   source_faces, target_faces,
-                                   source_gallery_order, target_gallery_order,
-                                   result) for i in range(faceCountToSwap)]
-
+        futures = [
+            executor.submit(
+                swap_single_face, i, source_faces, target_faces,
+                source_gallery_order, target_gallery_order, result
+            )
+            for i in range(face_count_to_swap)
+        ]
         for i, future in enumerate(concurrent.futures.as_completed(futures)):
+            logger.debug(f'sourceGalleryOrder[{i}] is {source_gallery_order[i]}')
+            logger.debug(f'targetGalleryOrder[{i}] is {target_gallery_order[i]}')
+
             swapped_result = future.result()
             if swapped_result is not None:
                 result = swapped_result  # Update the result image with the latest swap
             else:
                 logger.error(f'Skipping update for face [{i}] due to error')
 
-    # Optionally return a base64-encoded string for frontend rendering
-    _, buffer = cv2.imencode('.jpg', result)
-    result_base64 = base64.b64encode(buffer).decode('utf-8')
-
-    return f"data:image/jpeg;base64,{result_base64}"
-
+    return MediaUtils.convert_to_base64(result)
 
 # Function for swapping faces using the InsightFace swapper model
-def swap_faces(
-    source_file, source_file_name, source_gallery_order,
-    target_file, target_file_name, target_gallery_order,
-    use_process_pool=False
+def swap_faces_sync(
+    source_file_name, source_gallery_order,
+    target_file_name, target_gallery_order,
 ) -> str:
 
-    return swap_faces_sync(
-        source_file, source_file_name, source_gallery_order,
-        target_file, target_file_name, target_gallery_order,
-        use_process_pool=False
+    """Perform face swapping between source and target image."""
+
+    target_img, source_faces, target_faces, face_count_to_swap = process_face_swap(
+        source_file_name, target_file_name, source_gallery_order, target_gallery_order
     )
-    # return swap_faces_async(
-    #     source_file, source_file_name, source_gallery_order,
-    #     target_file, target_file_name, target_gallery_order,
-    #     use_process_pool=False
-    # )
+    result = target_img
+    for i in range(face_count_to_swap):
+        logger.debug(f'sourceGalleryOrder[{i}] is {source_gallery_order[i]}')
+        logger.debug(f'targetGalleryOrder[{i}] is {target_gallery_order[i]}')
+
+        # Call the externalized swap_single_face function for each pair of faces
+        swapped_result = swap_single_face(i, source_faces, target_faces, source_gallery_order, target_gallery_order, result)
+        
+        if swapped_result is not None:
+            result = swapped_result  # Update the result image with the latest swap
+        else:
+            logger.error(f'Skipping face [{i}] due to error during face swapping')
+
+    return MediaUtils.convert_to_base64(result)
+
+
+def choose_executor(use_process_pool):
+    """Helper function to choose the appropriate executor."""
+    if use_process_pool:
+        cpu_cores = os.cpu_count()  # Get the number of available CPU cores
+        logger.debug(f'Using ProcessPoolExecutor with {cpu_cores} cores')
+        return concurrent.futures.ProcessPoolExecutor, {'max_workers': cpu_cores}
+    else:
+        logger.debug(f'Using ThreadPoolExecutor')
+        return concurrent.futures.ThreadPoolExecutor, {}
