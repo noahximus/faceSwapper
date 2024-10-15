@@ -43,16 +43,19 @@ def swap_single_face(
 
 
 def process_face_swap(
-    source_file_name, target_file_name, source_gallery_order, target_gallery_order,
+    source_file, target_file, source_file_name, target_file_name, source_gallery_order, target_gallery_order,
 ) -> Tuple[np.ndarray, List[int], List[int], int]:
 
     """Common logic for face swapping between source and target images."""
 
-    source_file_path = CommonConfig.TARGETS_UPLOADS_DIR.joinpath(source_file_name)
-    target_file_path = CommonConfig.TARGETS_UPLOADS_DIR.joinpath(target_file_name)
+    # Convert files to OpenCV images
+    source_img = MediaUtils.convert_file_to_cv2_image(source_file)
+    target_img = MediaUtils.convert_file_to_cv2_image(target_file)
 
-    source_img = cv2.imread(str(source_file_path))
-    target_img = cv2.imread(str(target_file_path))
+    # source_file_path = CommonConfig.TARGETS_UPLOADS_DIR.joinpath(source_file_name)
+    # target_file_path = CommonConfig.TARGETS_UPLOADS_DIR.joinpath(target_file_name)
+    # source_img = cv2.imread(str(source_file_path))
+    # target_img = cv2.imread(str(target_file_path))
 
     # Detect faces in both source and target images
     source_faces = ANALYZER.get(source_img)
@@ -73,14 +76,14 @@ def process_face_swap(
 
 # Function for swapping faces using the InsightFace swapper model
 def swap_faces_sync(
-    source_file_name, source_gallery_order,
-    target_file_name, target_gallery_order,
+    source_file, source_file_name, source_gallery_order,
+    target_file, target_file_name, target_gallery_order,
 ) -> str:
 
     """Perform face swapping between source and target image."""
 
     target_img, source_faces, target_faces, face_count_to_swap = process_face_swap(
-        source_file_name, target_file_name, source_gallery_order, target_gallery_order
+        source_file, target_file, source_file_name, target_file_name, source_gallery_order, target_gallery_order
     )
     result = target_img
     for i in range(face_count_to_swap):

@@ -39,5 +39,6 @@ def index():
         apiUrlForUploads=CommonConfig.UPLOAD_URL, # Pass API URL to template
         apiUrlForFaceSwap=CommonConfig.FACESWAP_URL, # Pass API URL to template
         apiUrlForEnhance=CommonConfig.ENHANCE_URL, # Pass API URL to template
+        apiUrlForFaceExtract=CommonConfig.EXTRACT_URL, # Pass API URL to template
     )
 

@@ -26,4 +26,4 @@ application:
   
   gallery:
     face_extract:
-      url: '/faceExtract'
+      url: '/extractFaces'

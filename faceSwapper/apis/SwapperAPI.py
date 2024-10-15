@@ -58,8 +58,8 @@ def faceSwap() -> Tuple[Response, int]:
         # Perform face swapping using the files and faces
         try:
             result = SwapperService.swap_faces_sync(
-                source_file_Name, source_gallery_order,
-                target_file_Name, target_gallery_order
+                source_file, source_file_Name, source_gallery_order,
+                target_file, target_file_Name, target_gallery_order
             )
             logger.debug(f"Done with SWAPPING")
             

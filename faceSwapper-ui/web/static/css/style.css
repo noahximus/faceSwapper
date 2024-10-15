@@ -10,7 +10,7 @@ body {
 }
 
 /* Main Container */
-.container, .file-upload-container {
+.container, .file-upload-container, .results-preview-conatiner {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
@@ -22,7 +22,7 @@ body {
     /*justify-content: center;*/
     align-items: center;
     /*flex-direction: column;*/
-    min-height: 40vh;
+    min-height: 10vh;
     padding-bottom: 20px;
 }
 
@@ -153,8 +153,9 @@ button:disabled {
     background-color: #007aff;
     color: #fff;
     border: none;
-    padding: 0.5em 1em;
-    font-size: 0.75em;
+    /*padding: 0.5em 1em;*/
+    padding: 0.4em 0.6em;
+    font-size: 0.85em;
     border-radius: 3px;
     cursor: pointer;
     box-shadow: 0 2px 10px rgba(0, 122, 255, 0.2);
@@ -175,8 +176,9 @@ button:disabled {
     background-color: #ff4d4d; /* Red background for delete */
     color: #fff;
     border: none;
-    padding: 0.5em 1em;
-    font-size: 0.75em;
+    /*padding: 0.5em 1em;*/
+    padding: 0.4em 0.6em;
+    font-size: 0.85em;
     border-radius: 3px;
     cursor: pointer;
     box-shadow: 0 2px 10px rgba(255, 0, 0, 0.2);
@@ -291,7 +293,7 @@ footer {
 }
 
 /* Container for the image previews */
-.results-container {
+.results-container, .results-section {
     display: flex; /* Flexbox to align images side by side */
     justify-content: space-between; /* Add space between the images */
     align-items: center; /* Align images vertically centered if their sizes differ */

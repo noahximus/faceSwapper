@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>Image Gallery (Source and Target)</h1>
+    <h1>Gallery</h1>
 
     <div class="file-upload-container">
 
@@ -30,10 +30,13 @@
             <p id="targetFilename"></p>
         </div>
     </div>
-
-    <div class="results-container">
-        <div class="results-preview-container" id="swappedResult"></div>
-        <div class="results-preview-container" id="enhancedResult"></div>
+    <div class='results-preview-conatiner'>
+        <div class='results-container'>
+            <div class="results-section">
+                <div class="results-preview-container" id="swappedResult"></div>
+                <div class="results-preview-container" id="enhancedResult"></div>
+            </div>
+        </div>
     </div>
 
     <div class="processing-controls-container">
@@ -48,7 +51,7 @@
     <div id="loadingSpinner"></div>
 
     <footer>
-        © 2024 Visual Manipulation Website | All Rights Reserved
+        © 2024 Visual Manipulation | All Rights Reserved
     </footer>
 
     <!-- Load the new consolidated script -->
@@ -61,6 +64,7 @@
         const apiUrlForUploads = "{{ apiUrlForUploads }}";
         const apiUrlForFaceSwap = "{{ apiUrlForFaceSwap }}";
         const apiUrlForEnhance = "{{ apiUrlForEnhance }}";
+        const apiUrlForFaceExtract = "{{ apiUrlForFaceExtract }}";
     </script>
 </body>
 </html>

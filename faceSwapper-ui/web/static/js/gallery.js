@@ -34,6 +34,41 @@ export async  function uploadFile(inputId, uploadType) {
         showMessage(`Error uploading ${uploadType}: ${error.message}`, false);
     }
 }
+
+// ================================
+// Upload functionality (from upload.js)
+// ================================
+export async  function extractFace(inputId, uploadType) {
+    const fileInput = document.getElementById(inputId);
+    const file = fileInput.files[0];
+
+    if (!file) {
+        commons.showMessage(`Please choose a ${uploadType} file.`, false);
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('uploadType', uploadType);
+
+    try {
+        const response = await fetch(apiUrlForFaceExtract, {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+        if (response.status === 200) {
+            commons.showMessage(`${uploadType.charAt(0).toUpperCase() + uploadType.slice(1)} face(s) extracted successfully!`, true);
+            loadImagesFromApiResult(`${uploadType}Gallery`, result.faces);
+        } else {
+            showMessage(`Face Extraction failed: ${result.error}`, false);
+        }
+    } catch (error) {
+        showMessage(`Error extracting faces for ${uploadType}: ${error.message}`, false);
+    }
+}
+
 // ================================
 // Gallery handling (from gallery.js)
 // ================================
@@ -52,6 +87,7 @@ export function loadImagesFromInput(divId, fileInput) {
     equalizeHeightsAcrossGalleries();
 }
 
+
 export function loadImagesFromApiResult(divId, faces) {
     console.log('loadImagesFromApiResult')
     const galleryDiv = document.getElementById(divId);  // Get the div by its ID
@@ -65,6 +101,7 @@ export function loadImagesFromApiResult(divId, faces) {
     });
     equalizeHeightsAcrossGalleries();
 }
+
 
 export function duplicateFace(imageElement) {
     const parentContainer = imageElement.parentElement;
@@ -86,11 +123,13 @@ export function duplicateFace(imageElement) {
     parentParentContainer.appendChild(clonedContainer);
 }
 
+
 export function deleteFace(button) {
     // Get the parent container of the image, which is .image-container
     const imageContainer = button.parentElement;
     imageContainer.remove();
 }
+
 
 export function handleImageLoad(imgSrc, faceName, index, galleryDiv) {
     const img = document.createElement('img');
@@ -129,6 +168,7 @@ export function handleImageLoad(imgSrc, faceName, index, galleryDiv) {
 
     galleryDiv.appendChild(imageContainer);
 }
+
 
 export function makeImagesDraggable(containerId) {
     let draggedElement = null;
@@ -177,13 +217,14 @@ export function makeImagesDraggable(containerId) {
     });
 }
 
+
 // ================================
 // Initialization (from preparation.js)
 // ================================
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('source').addEventListener('change', function(event) {
         commons.showPreviews(this, document.getElementById('sourcePreview'));
-        uploadFile(event.target.id, 'source');
+        extractFace(event.target.id, 'source');
         const files = event.target.files;
         const filenameDisplay = document.getElementById('sourceFilename');
         filenameDisplay.textContent = files.length > 0 ? files[0].name : '';
@@ -191,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('target').addEventListener('change', function(event) {
         commons.showPreviews(this, document.getElementById('targetPreview'));
-        uploadFile(event.target.id, 'target');
+        extractFace(event.target.id, 'target');
         const files = event.target.files;
         const filenameDisplay = document.getElementById('targetFilename');
         filenameDisplay.textContent = files.length > 0 ? files[0].name : '';
@@ -200,6 +241,7 @@ document.addEventListener('DOMContentLoaded', function () {
     makeImagesDraggable('sourceGallery');
     makeImagesDraggable('targetGallery');
 });
+
 
 // Function to extract the current order of images from a given container
 export function getImageOrder(containerElement) {
@@ -211,6 +253,8 @@ export function getImageOrder(containerElement) {
     });
     return order;
 }
+
+
 export function equalizeHeightsAcrossGalleries() {
     const containers = document.querySelectorAll('.source-gallery .image-container, .target-gallery .image-container');
     let maxHeight = 0;
@@ -237,5 +281,4 @@ export function equalizeHeightsAcrossGalleries() {
 
 // Run the equalizeHeightsAcrossGalleries function after the images load
 window.onload = equalizeHeightsAcrossGalleries;
-
 // Optionally, you can re-run this function if new images are added dynamically
