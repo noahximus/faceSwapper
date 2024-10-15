@@ -59,16 +59,17 @@ To install and run the project locally, follow these steps:
 
 ## Usage
 
-1. **Upload Images**: Click on the upload buttons to add images to the gallery.
-2. **Swap Faces**: After uploading, select the source and target images, and use the **Swap** button to swap faces between them.
-3. **Enhance Images**: Enhance faces before swapping using the available controls.
-4. **Duplicate Faces**: Use the **Duplicate** button to make copies of selected faces for reuse.
-5. **Delete Faces**: Remove unwanted faces from the gallery by clicking the **Delete** button.
+1. **Choose Images**: Click on choose files to add images to the gallery.
+2. **Pair Faces**: After selecting source and target images, pair each face from source image to target image.
+3. **Duplicate Faces**: Use the **Duplicate +** button to make copies of selected faces for reuse.
+4. **Delete Faces**: Remove unwanted faces from the gallery by clicking the **Delete -** button.
+5. **Swap Faces**: Use the **Swap** button to swap faces between the source and target images.
+6. **Enhance Images**: Enhance the faces after swapping using the available controls.
 
 ### Gallery Management
 
-- **Duplicate Faces**: Each face in the gallery has a **Duplicate** button next to it. Clicking this button duplicates the face and adds it to the gallery for reuse in future swaps.
-- **Delete Faces**: A **Delete** button is provided next to each face in the gallery, allowing users to remove faces they no longer need.
+- **Duplicate Faces**: Each face in the gallery has a **Duplicate +** button next to it. Clicking this button duplicates the face and adds it to the gallery for reuse in future swaps.
+- **Delete Faces**: A **Delete -** button is provided next to each face in the gallery, allowing users to remove faces they no longer need.
 
 ### Example of Buttons Layout:
 - **Duplicate**: Creates a copy of the selected face.
@@ -80,23 +81,23 @@ Buttons are displayed in a column layout for easy interaction. The gap between t
 
 ### Image Enhancement
 
-Before swapping faces, users can enhance the quality of face images. The system allows for real-time processing, and users can see a loading spinner while the images are being processed.
+After swapping faces, users can enhance the quality of face images. The system allows for real-time processing, and users can see a loading spinner while the images are being processed.
 
 ### Face Swapping
 
-Once images are uploaded and faces are detected, users can select source and target faces to swap. The system uses OpenCV for image manipulation, ensuring high-quality face swaps.
+Once images are selected and faces are detected, users can select source and target faces to swap. The system uses OpenCV for image manipulation, ensuring high-quality face swaps.
 
 ## API Endpoints
 
 The app provides the following API endpoints:
 
-- **/process-images**: Handles image processing and face detection.
-- **/swap-faces**: Processes face swapping between selected images.
+- **/faceSwap**: Processes face swapping between selected images.
+- **/enhance**: Processes face enhancement.
 
 Example usage:
 
 ```bash
-POST /swap-faces
+POST /faceSwap
 Content-Type: application/json
 
 {
