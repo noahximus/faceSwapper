@@ -104,31 +104,92 @@ button:disabled {
     flex-direction: row;
     justify-content: space-evenly;
     align-items: flex-start;  /* Align the items to the top */
-    gap: 20px;                /* Add spacing between the source and target galleries */
+    gap: 10px;                /* Add spacing between the source and target galleries */
 }
 
-/* Vertical layout for the image-container inside each gallery */
+/* Source Gallery - Button on the Right */
+.source-gallery .image-container {
+    display: flex;
+    flex-direction: row; /* Image on the left, button on the right */
+    align-items: center; /* Center button and image vertically */
+    padding: 3px; /* Adjust padding to reduce space around */
+    gap: 3px; /* Add a small gap between the image and button */
+}
+
+/* Target Gallery - Button on the Left */
+.target-gallery .image-container {
+    display: flex;
+    flex-direction: row-reverse; /* Button on the left, image on the right */
+    align-items: center; /* Center button and image vertically */
+    padding: 3px; /* Adjust padding to reduce space around */
+    gap: 3px; /* Small gap between the button and the image */
+}
+
+/* Image and Button Layout */
 .image-container {
     display: flex;
-    flex-direction: column;   /* Makes content inside image-container stack vertically */
-    align-items: center;      /* Center items horizontally inside the container */
-    /*margin: 2px;*/
-    /*border: 1px solid #ddd;*/
-    padding: 2px;
-    flex-grow: 1;             /* Allow image-containers to grow equally */
+    align-items: center;
+    gap: 5px; /* Space between image and buttons */
 }
 
-/* If you want a specific width for each gallery (optional) */
-.source-gallery, .target-gallery {
-    display: flex;
-    flex-basis: 45%;          /* Each gallery takes 45% of the available space */
-    flex-direction: column;   /* Makes content inside image-container stack vertically */
-}
-
+/* Ensure consistent image sizing */
 .image-container img {
-    /*width: 100%;*/
-    width: 4vw;
-    height: auto; /* Keep the aspect ratio */
+    max-width: 4vw; /* Adjust the image width as per requirement */
+    height: auto;
+    margin: 0; /* Remove additional margin around the image */
+}
+
+/* Button Container to display buttons in a column */
+.button-container {
+    display: flex;
+    flex-direction: column; /* Display buttons in a column (one on top of the other) */
+    gap: 1px; /* Space between the Duplicate and Delete buttons */
+    margin-left: 1px; /* Space between the button container and the image */
+    /*justify-content: center;*/
+}
+
+/* Duplicate Button */
+.duplicate-btn {
+    background-color: #007aff;
+    color: #fff;
+    border: none;
+    padding: 0.5em 1em;
+    font-size: 0.75em;
+    border-radius: 3px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 122, 255, 0.2);
+    transform: scale(0.60); /* Shrink button */
+    transform-origin: center;
+    margin-left: 1px; /* Add a small margin between Duplicate and Delete button */
+    margin-right: 1px; /* Add a small margin between Duplicate and Delete button */
+    margin-top: 0px; /* Adds 20px space above */
+    margin-bottom: 0px; /* Adds 20px space below */
+}
+
+.duplicate-btn:hover {
+    background-color: #005bb5;
+}
+
+/* Delete Button */
+.delete-btn {
+    background-color: #ff4d4d; /* Red background for delete */
+    color: #fff;
+    border: none;
+    padding: 0.5em 1em;
+    font-size: 0.75em;
+    border-radius: 3px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(255, 0, 0, 0.2);
+    margin-left: 1px;
+    margin-right: 1px; /* Add a small margin between Duplicate and Delete button */
+    transform: scale(0.60); /* Shrink to match Duplicate button size */
+    transform-origin: center;
+    margin-top: 0px; /* Adds 20px space above */
+    margin-bottom: 0px; /* Adds 20px space below */
+}
+
+.delete-btn:hover {
+    background-color: #cc0000;
 }
 
 .image-filename {
@@ -189,7 +250,7 @@ footer {
 
 /* Responsive Layout */
 @media screen and (max-width: 768px) {
-    .file-upload-container, .preview-container {
+    .file-upload-container, .preview-container, .results-container {
         flex-direction: column;
         align-items: center;
     }
@@ -241,11 +302,12 @@ footer {
 /* Styling for individual image preview containers */
 .results-preview-container {
     flex: 1; /* Make the containers flexible to share the space equally */
-    max-width: 50%; /* Make sure each container takes up no more than half of the width */
+    max-width: 45%; /* Make sure each container takes up no more than half of the width */
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden; /* Hide overflow if image is too big */
+    margin: 0 10px; /* Add some space between the 2 containers */
 }
 
 /* Ensure images fit within their containers and are similarly sized */
@@ -254,3 +316,4 @@ footer {
     max-height: 100%; /* Image should not exceed the container's height */
     object-fit: contain; /* Ensure the image keeps its aspect ratio and is fully visible */
 }
+

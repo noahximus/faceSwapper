@@ -66,6 +66,32 @@ export function loadImagesFromApiResult(divId, faces) {
     equalizeHeightsAcrossGalleries();
 }
 
+export function duplicateFace(imageElement) {
+    const parentContainer = imageElement.parentElement;
+    const clonedContainer = parentContainer.cloneNode(true);
+
+    // Update the click event to ensure the new cloned image can also be duplicated
+    const duplicateBtn = clonedContainer.querySelector('.duplicate-btn');
+    duplicateBtn.addEventListener('click', function() {
+      duplicateFace(clonedContainer.querySelector('img'));
+    });
+
+    // Update the click event to ensure the new cloned image can also be duplicated
+    const deleteButton = clonedContainer.querySelector('.delete-btn');
+    deleteButton.addEventListener('click', function() {
+      deleteFace(clonedContainer.querySelector('img'));
+    });
+
+    const parentParentContainer = parentContainer.parentElement;
+    parentParentContainer.appendChild(clonedContainer);
+}
+
+export function deleteFace(button) {
+    // Get the parent container of the image, which is .image-container
+    const imageContainer = button.parentElement;
+    imageContainer.remove();
+}
+
 export function handleImageLoad(imgSrc, faceName, index, galleryDiv) {
     const img = document.createElement('img');
     img.src = imgSrc;
@@ -78,7 +104,29 @@ export function handleImageLoad(imgSrc, faceName, index, galleryDiv) {
     imageContainer.draggable = true;
     imageContainer.dataset.index = index;
 
+    const duplicateButton = document.createElement('button');
+    duplicateButton.classList.add('duplicate-btn');
+    duplicateButton.onclick = function() {
+        duplicateFace(img);
+    }
+    duplicateButton.innerText = '+';
+
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add('delete-btn');
+    deleteButton.onclick = function() {
+        deleteFace(img);
+    }
+    deleteButton.innerText = '-';
+
+    const buttonContainer = document.createElement('div');
+    buttonContainer.classList.add('button-container');
+
+    buttonContainer.appendChild(duplicateButton);
+    buttonContainer.appendChild(deleteButton);
+
     imageContainer.appendChild(img);
+    imageContainer.appendChild(buttonContainer);
+
     galleryDiv.appendChild(imageContainer);
 }
 
@@ -158,16 +206,7 @@ export function getImageOrder(containerElement) {
     const order = [];
     // Query the image containers inside the provided element
     containerElement.querySelectorAll('.image-container').forEach(container => {
-        // const filename = container.querySelector('.image-filename').textContent;  // Get the filename
         const index = container.dataset.index;  // Get the data-index attribute
-        // const imgSrc = container.querySelector('img').src;  // Get the base64 image source
-        
-        // Store both filename, index, and the image src in the array
-        // order.push({ 
-        //     // filename: filename, 
-          // 'index': index,
-          // imgSrc: imgSrc 
-        // });
         order.push(index);
     });
     return order;
@@ -194,6 +233,7 @@ export function equalizeHeightsAcrossGalleries() {
         container.style.height = `${maxHeight}px`;
     });
 }
+
 
 // Run the equalizeHeightsAcrossGalleries function after the images load
 window.onload = equalizeHeightsAcrossGalleries;
