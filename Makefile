@@ -20,6 +20,11 @@ build:
 	pyinstaller --onefile \
 		--add-data "config.yaml:." \
 		--add-data "faceSwapper-targets/models/inswapper_128_fp16.onnx:faceSwapper-targets/models" \
+		--add-data "faceSwapper-targets/models/GFPGANv1.4.pth:faceSwapper-targets/models" \
+		--add-data "gfpgan/weights/detection_Resnet50_Final.pth:gfpgan/weights" \
+		--add-data "gfpgan/weights/parsing_parsenet.pth:gfpgan/weights" \
+		--add-data "faceSwapper-ui/web/static:faceSwapper-ui/web/static" \
+		--add-data "faceSwapper-ui/web/templates:faceSwapper-ui/web/static" \
 		--name $(EXECUTABLE_NAME) $(ENTRY_POINT)
 
 # Clean up the build and dist directories

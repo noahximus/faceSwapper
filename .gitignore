@@ -3,4 +3,6 @@ faceSwapper-targets
 references
 build
 dist
+*.spec
 gfpgan
+
