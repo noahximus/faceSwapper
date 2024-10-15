@@ -13,15 +13,19 @@ from faceSwapper.commons.utils import FileUtils as FileUtils
 logging.root.setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+
 # Function to check if the file extension is allowed
 def is_allowed_image_file(filename: str) -> bool:
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in CommonConfig.ALLOWED_UPLOAD_FILE_EXTENSIONS
 
+
 def is_image(image_path: str) -> bool:
     return FileUtils.is_file_type(image_path,'image/')
 
+
 def is_video(video_path: str) -> bool:
     return FileUtils.is_file_type(video_path,'video/')
+
 
 # Verify that the file is indeed an image
 def is_image_file(file):
@@ -38,6 +42,7 @@ def is_image_file(file):
 
     return is_true_image
 
+
 # Function to convert the file to an OpenCV image
 def convert_file_to_opencv_image(file):
     # Read the file into a NumPy array
@@ -47,6 +52,7 @@ def convert_file_to_opencv_image(file):
     img = cv2.imdecode(np_array, cv2.IMREAD_COLOR)
     
     return img
+
 
 # Function to decode base64 string into an OpenCV image
 def base64_to_cv2_image(base64_string):
@@ -65,11 +71,13 @@ def base64_to_cv2_image(base64_string):
 
     return img
 
+
 # Function to encode an OpenCV image back to base64
 def cv2_image_to_base64(cv2_image):
     _, buffer = cv2.imencode('.jpg', cv2_image)
     base64_image = base64.b64encode(buffer).decode('utf-8')
     return f"data:image/jpeg;base64,{base64_image}"
+
 
 # Function to convert file or base64 string to OpenCV image
 def convert_file_to_cv2_image(file_data):
@@ -85,22 +93,12 @@ def convert_file_to_cv2_image(file_data):
         img = cv2.imdecode(np_array, cv2.IMREAD_COLOR)
     return img
 
+
 def convert_to_base64(image):
     _, buffer = cv2.imencode('.jpg', image)
     img_base64 = base64.b64encode(buffer).decode('utf-8')
     return f"data:image/jpeg;base64,{img_base64}"
 
-def base64_to_numpy_1(base64_string):
-    # Decode the base64 string to bytes
-    image_bytes = base64.b64decode(base64_string)
-    
-    # Convert bytes to a NumPy array (image)
-    np_arr = np.frombuffer(image_bytes, np.uint8)
-    
-    # Decode the image (assuming it's in JPEG/PNG format)
-    image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-    
-    return image
 
 def base64_to_numpy(base64_string):
     # Remove header if present
