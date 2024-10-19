@@ -89,13 +89,24 @@ button:disabled {
 .preview-container {
     display: flex;
     justify-content: center; /* space-between;*/
-    margin-top: 20px;
+    align-items: center;
+    text-align: center;
+    /*border: 2px dashed #ccc;*/
+    /*margin-top: 20px;*/
+    margin: 20px; 
+    /*width: 300px;*/
+    /*height: 200px;*/
 }
 
 .preview-container img {
     width: 100%;
     height: auto;
     margin: 5px;
+}
+
+.preview-container.dragover {
+    background-color: #f0f0f0;
+    border-color: #333;
 }
 
 /* Horizontal layout for the gallery containers */

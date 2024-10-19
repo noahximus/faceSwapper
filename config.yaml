@@ -4,26 +4,27 @@ application:
   url: 'http://locahlost:5000'
   config_file : 'config.yaml'
   
-  upload:
-    # url: "${application.url}/upload"
-    url: "/upload"
-    uploads:
+  uploader:
+    face_uploader:
+      url: "/upload"
+    face_uploads:
       url: "/uploads"
     allowed_extensions: ['png', 'jpg', 'jpeg', 'gif']
 
   swapper:
     face_swap:
-      url: '/faceSwap'
+      url: '/api/face/swapper/swap'
     model:
       url: 'https://huggingface.co/hacksider/deep-live-cam/blob/main/inswapper_128_fp16.onnx' # URL for inswapper model
       name: 'inswapper_128_fp16.onnx'
+
   enhancer:
-    enhance:
-      url: '/enhance'
+    face_enhance:
+      url: '/api/face/enhancer/enhance'
     model:
       url: 'https://github.com/TencentARC/GFPGAN/releases/download/v1.3.4/GFPGANv1.4.pth' # URL for inswapper model
       name: 'GFPGANv1.4.pth'
   
-  gallery:
+  extractor:
     face_extract:
-      url: '/extractFaces'
+      url: '/api/face/extractor/extract'

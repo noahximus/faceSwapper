@@ -1,10 +1,7 @@
 
 from flask import Flask
 
-from faceSwapper.apis.UploadsAPI import uploadsAPI_routes
-from faceSwapper.apis.SwapperAPI import swapperAPI_routes
-from faceSwapper.apis.EnhancerAPI import enhancerAPI_routes
-from faceSwapper.apis.GalleryAPI import galleryAPI_routes
+from faceSwapper.apis import faceSwapper_bp
 from faceSwapper.routes.FaceSwapper import faceSwapper_routes
 from faceSwapper.commons.config import CommonConfig
 
@@ -15,10 +12,7 @@ def create_app():
         template_folder=CommonConfig.USER_INTERFACE_WEB_TEMPLATES_DIR,
         static_folder=CommonConfig.USER_INTERFACE_WEB_STATIC_DIR
     )
-    app.register_blueprint(swapperAPI_routes)
-    app.register_blueprint(uploadsAPI_routes)
-    app.register_blueprint(enhancerAPI_routes)
-    app.register_blueprint(galleryAPI_routes)
+    app.register_blueprint(faceSwapper_bp,  url_prefix='/api/face')
     app.register_blueprint(faceSwapper_routes)
 
     return app

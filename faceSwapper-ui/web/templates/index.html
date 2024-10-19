@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Gallery (Source and Target)</title>
+    <title>Face Swapper</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <h1>Gallery</h1>
-
     <div class="file-upload-container">
-
+        <!-- Source Preview Area -->
         <div class="file-upload-section">
             <label for="source">Source</label>
             <input type="file" id="source" multiple>
@@ -23,13 +22,15 @@
             <div class="target-gallery" id="targetGallery"></div>
         </div>
 
-        <div class="file-upload-section">
+        <!-- Target Preview Area -->
+       <div class="file-upload-section">
             <label for="target">Target</label>
             <input type="file" id="target" multiple>
             <div class="preview-container" id="targetPreview"></div>
             <p id="targetFilename"></p>
         </div>
     </div>
+
     <div class='results-preview-conatiner'>
         <div class='results-container'>
             <div class="results-section">
@@ -62,7 +63,7 @@
 
     <script>
         const apiUrlForUploads = "{{ apiUrlForUploads }}";
-        const apiUrlForFaceSwap = "{{ apiUrlForFaceSwap }}";
+        const apiUrlForSwap = "{{ apiUrlForSwap }}";
         const apiUrlForEnhance = "{{ apiUrlForEnhance }}";
         const apiUrlForFaceExtract = "{{ apiUrlForFaceExtract }}";
     </script>

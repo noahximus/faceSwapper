@@ -43,19 +43,13 @@ def swap_single_face(
 
 
 def process_face_swap(
-    source_file, target_file, source_file_name, target_file_name, source_gallery_order, target_gallery_order,
+    source_file, target_file, source_gallery_order, target_gallery_order,
 ) -> Tuple[np.ndarray, List[int], List[int], int]:
-
     """Common logic for face swapping between source and target images."""
 
     # Convert files to OpenCV images
     source_img = MediaUtils.convert_file_to_cv2_image(source_file)
     target_img = MediaUtils.convert_file_to_cv2_image(target_file)
-
-    # source_file_path = CommonConfig.TARGETS_UPLOADS_DIR.joinpath(source_file_name)
-    # target_file_path = CommonConfig.TARGETS_UPLOADS_DIR.joinpath(target_file_name)
-    # source_img = cv2.imread(str(source_file_path))
-    # target_img = cv2.imread(str(target_file_path))
 
     # Detect faces in both source and target images
     source_faces = ANALYZER.get(source_img)
@@ -76,14 +70,14 @@ def process_face_swap(
 
 # Function for swapping faces using the InsightFace swapper model
 def swap_faces_sync(
-    source_file, source_file_name, source_gallery_order,
-    target_file, target_file_name, target_gallery_order,
+    source_file, source_gallery_order,
+    target_file, target_gallery_order,
 ) -> str:
 
     """Perform face swapping between source and target image."""
 
     target_img, source_faces, target_faces, face_count_to_swap = process_face_swap(
-        source_file, target_file, source_file_name, target_file_name, source_gallery_order, target_gallery_order
+        source_file, target_file,source_gallery_order, target_gallery_order
     )
     result = target_img
     for i in range(face_count_to_swap):
@@ -102,14 +96,17 @@ def swap_faces_sync(
 
 
 def choose_executor(use_process_pool):
-    """Helper function to choose the appropriate executor."""
+    """
+    Return the appropriate executor class and arguments based on whether
+    a process pool or thread pool is requested.
+    """
+    cpu_cores = os.cpu_count()  # Get the number of available CPU cores
     if use_process_pool:
-        cpu_cores = os.cpu_count()  # Get the number of available CPU cores
         logger.debug(f'Using ProcessPoolExecutor with {cpu_cores} cores')
         return concurrent.futures.ProcessPoolExecutor, {'max_workers': cpu_cores}
     else:
         logger.debug(f'Using ThreadPoolExecutor')
-        return concurrent.futures.ThreadPoolExecutor, {}
+        return concurrent.futures.ThreadPoolExecutor, {'max_workers': cpu_cores}
 
 
 def swap_faces_async(
@@ -117,15 +114,15 @@ def swap_faces_async(
     target_file_name, target_gallery_order,
     use_process_pool=False
 ) -> str:
-
     """Perform face swapping between source and target images, either synchronously or asynchronously."""
-    
+
+    # Process source and target images and get face data
     target_img, source_faces, target_faces, face_count_to_swap = process_face_swap(
         source_file_name, target_file_name, source_gallery_order, target_gallery_order
     )
     result = target_img
 
-    # If use_process_pool is set to True, use ProcessPoolExecutor, otherwise use ThreadPoolExecutor
+    # Choose the executor class (Thread or Process) and the arguments for the executor
     executor_class, executor_args = choose_executor(use_process_pool)
 
     # Process each face swap using the chosen executor (Thread or Process Pool)
@@ -137,6 +134,7 @@ def swap_faces_async(
             )
             for i in range(face_count_to_swap)
         ]
+
         for i, future in enumerate(concurrent.futures.as_completed(futures)):
             logger.debug(f'sourceGalleryOrder[{i}] is {source_gallery_order[i]}')
             logger.debug(f'targetGalleryOrder[{i}] is {target_gallery_order[i]}')
@@ -147,6 +145,7 @@ def swap_faces_async(
             else:
                 logger.error(f'Skipping update for face [{i}] due to error')
 
+    # Convert the final result to a base64 image and return it
     return MediaUtils.convert_to_base64(result)
 
 

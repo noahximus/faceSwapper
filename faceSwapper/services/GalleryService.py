@@ -4,9 +4,19 @@ import numpy as np
 import cv2
 from io import BytesIO
 import base64
+import logging
 
+from typing import Dict, Any, Tuple
 from faceSwapper.model.Analyzer import Analyzer
 from faceSwapper.model.Swapper import Swapper
+
+from werkzeug.utils import secure_filename
+from werkzeug.datastructures import FileStorage
+
+from faceSwapper.commons.config import CommonConfig
+
+logging.root.setLevel(logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 ANALYZER = Analyzer.FACE_ANALYZER
 SWAPPER = Swapper.get_face_swapper()
@@ -66,3 +76,25 @@ def extract_faces(image):
         extracted_faces.append(face_base64)
 
     return extracted_faces
+
+def extract(file: FileStorage, uploadType: str|None) -> Tuple[Dict[str, Any], int]:
+
+    try:
+        logger.debug(f'Reading image from file.')
+
+        # Convert the uploaded file to an OpenCV image
+        img = read_image_from_file(file)
+        logger.debug(f'Extracting faces from image.')
+
+        # Extract faces using the reusable extract_faces method
+        faces = extract_faces(img)
+        logger.debug(f'There are {len(faces)} faces in the image.')
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+    return {
+        "filename": secure_filename(str(file.filename)),
+        "uploadType": uploadType,
+        "image_url": f'{CommonConfig.UPLOADS_URL}/{secure_filename(str(file.filename))}',
+        "faces": faces,
+    }, 200

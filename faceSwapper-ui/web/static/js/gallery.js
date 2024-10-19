@@ -218,26 +218,35 @@ export function makeImagesDraggable(containerId) {
 }
 
 
+// Define a reusable function to handle file change events
+function handleFileChange(event, type) {
+    const previewElement = document.getElementById(type + 'Preview');
+    const filenameDisplay = document.getElementById(type + 'Filename');
+
+    // Show the file preview using a common method
+    commons.showPreviews(event.target, previewElement);
+
+    // Extract face (or any other logic) using the target id and type
+    extractFace(event.target.id, type);
+
+    // Display the selected file name
+    const files = event.target.files;
+    filenameDisplay.textContent = files.length > 0 ? files[0].name : '';
+}
+
+
 // ================================
 // Initialization (from preparation.js)
 // ================================
 document.addEventListener('DOMContentLoaded', function () {
+    // Attach the event listeners and use the reusable function
     document.getElementById('source').addEventListener('change', function(event) {
-        commons.showPreviews(this, document.getElementById('sourcePreview'));
-        extractFace(event.target.id, 'source');
-        const files = event.target.files;
-        const filenameDisplay = document.getElementById('sourceFilename');
-        filenameDisplay.textContent = files.length > 0 ? files[0].name : '';
+        handleFileChange(event, 'source');
     });
 
     document.getElementById('target').addEventListener('change', function(event) {
-        commons.showPreviews(this, document.getElementById('targetPreview'));
-        extractFace(event.target.id, 'target');
-        const files = event.target.files;
-        const filenameDisplay = document.getElementById('targetFilename');
-        filenameDisplay.textContent = files.length > 0 ? files[0].name : '';
+        handleFileChange(event, 'target');
     });
-
     makeImagesDraggable('sourceGallery');
     makeImagesDraggable('targetGallery');
 });
@@ -282,3 +291,60 @@ export function equalizeHeightsAcrossGalleries() {
 // Run the equalizeHeightsAcrossGalleries function after the images load
 window.onload = equalizeHeightsAcrossGalleries;
 // Optionally, you can re-run this function if new images are added dynamically
+
+
+// // Prevent default behavior when dragging files over the page
+// export function handleDragOver(event) {
+//     event.preventDefault(); // Prevent default behavior (Prevent file from being opened)
+//     event.currentTarget.classList.add('dragover');
+// }
+//
+// // Handle the drop event and load the file
+// export function handleDrop(event, type) {
+//     event.preventDefault(); // Prevent default behavior (Stop the page from reloading)
+//     event.currentTarget.classList.remove('dragover');
+//
+//     const files = event.dataTransfer.files;
+//     if (files.length > 0) {
+//         loadFileFromDrop(files[0], type);
+//     }
+// }
+//
+// // Load the file and display it as an image preview
+// export function loadFileFromDrop(file, type) {
+//     const reader = new FileReader();
+//     reader.onload = function(e) {
+//         const preview = document.getElementById(type + 'Preview');
+//         preview.innerHTML = `<img src="${e.target.result}" alt="Preview" style="width: 100%; height: auto;">`;
+//
+//         // You can add additional logic here to handle the uploaded image file
+//     };
+//     reader.readAsDataURL(file);
+// }
+//
+// // Function for handling input change (for file input)
+// export function loadFile(event, type) {
+//     const input = event.target;
+//     const file = input.files[0];
+//     loadFileFromDrop(file, type);
+// }
+//
+// // Add click event listeners to trigger file input
+// document.getElementById('sourcePreview').addEventListener('click', function() {
+//     document.getElementById('source').click();
+// });
+//
+// document.getElementById('targetPreview').addEventListener('click', function() {
+//     document.getElementById('target').click();
+// });
+//
+// // Prevent default behavior when the file is dragged outside specific drop zones
+// document.addEventListener('dragover', function(event) {
+//     event.preventDefault();
+// });
+//
+// document.addEventListener('drop', function(event) {
+//     event.preventDefault();
+// });
+
+

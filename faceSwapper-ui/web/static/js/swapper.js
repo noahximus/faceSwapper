@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
             formData.append('targetGalleryOrder', JSON.stringify(targetGalleryOrder));  // Convert array to JSON string
 
             // Perform the fetch request
-            const response = await fetch(apiUrlForFaceSwap, {
+            const response = await fetch(apiUrlForSwap, {
                 method: 'POST',
                 body: formData
             });

@@ -15,8 +15,8 @@ if __name__ == '__main__':
     FORMAT = "['%(asctime)s - %(levelname)7s - %(filename)21s:%(lineno)3s - %(funcName)20s() ] %(message)s"
     logging.basicConfig(level=logging.DEBUG, format=FORMAT)
     
-    file_handler.setLevel(logging.DEBUG)
-    handler.setLevel(logging.DEBUG)
+    # file_handler.setLevel(logging.DEBUG)
+    # handler.setLevel(logging.DEBUG)
     # file_handler.setFormatter(logging.Formatter(
     #     '%(asctime)s %(levelname)s: %(message)s '
     #     '[in %(pathname)s:%(lineno)d]'

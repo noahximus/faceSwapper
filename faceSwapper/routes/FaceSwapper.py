@@ -25,8 +25,6 @@ def index():
     logger.debug(f'Statics: {CommonConfig.USER_INTERFACE_WEB_STATIC_DIR}')
     
     logger.debug(f'APPLICATION_URL: {CommonConfig.APPLICATION_URL}')
-    logger.debug(f'UPLOAD_URL: {CommonConfig.UPLOAD_URL}')
-    logger.debug(f'FACESWAP_URL: {CommonConfig.FACESWAP_URL}')
 
     manipulator = Manipulator()
     pre_check = manipulator.pre_check()
@@ -37,7 +35,7 @@ def index():
     return render_template(
         'index.html',
         apiUrlForUploads=CommonConfig.UPLOAD_URL, # Pass API URL to template
-        apiUrlForFaceSwap=CommonConfig.FACESWAP_URL, # Pass API URL to template
+        apiUrlForSwap=CommonConfig.SWAP_URL, # Pass API URL to template
         apiUrlForEnhance=CommonConfig.ENHANCE_URL, # Pass API URL to template
         apiUrlForFaceExtract=CommonConfig.EXTRACT_URL, # Pass API URL to template
     )

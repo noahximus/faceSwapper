@@ -18,16 +18,14 @@ with open(CONFIGURATION_FILE_PATH, 'r') as CONFIGURATION_FILE:
 APPLICATION_NAME = CONFIGURATION['application']['name']
 APPLICATION_URL = CONFIGURATION['application']['url']
 
-
 # UPLOADS URL
-UPLOAD_URL =  CONFIGURATION['application']['upload']['url']
-UPLOADS_URL =  CONFIGURATION['application']['upload']['uploads']['url']
+UPLOAD_URL =  CONFIGURATION['application']['uploader']['face_uploader']['url']
+UPLOADS_URL =  CONFIGURATION['application']['uploader']['face_uploads']['url']
+SWAP_URL = CONFIGURATION['application']['swapper']['face_swap']['url']
+ENHANCE_URL = CONFIGURATION['application']['enhancer']['face_enhance']['url']
+EXTRACT_URL = CONFIGURATION['application']['extractor']['face_extract']['url']
 
-FACESWAP_URL = CONFIGURATION['application']['swapper']['face_swap']['url']
-ENHANCE_URL = CONFIGURATION['application']['enhancer']['enhance']['url']
-EXTRACT_URL = CONFIGURATION['application']['gallery']['face_extract']['url']
-
-ALLOWED_UPLOAD_FILE_EXTENSIONS = CONFIGURATION['application']['upload']['allowed_extensions']
+ALLOWED_UPLOAD_FILE_EXTENSIONS = CONFIGURATION['application']['uploader']['allowed_extensions']
 
 # TARGETS related folders
 TARGETS_DIR = PROJECT_ROOT_PARENT_DIR.joinpath(f'{APPLICATION_NAME}-targets')
