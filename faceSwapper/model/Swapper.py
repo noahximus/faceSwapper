@@ -3,7 +3,7 @@ import logging
 import threading
 import insightface
 
-from typing import Any
+from typing import Any, Tuple
 
 # import cv2
 
@@ -20,17 +20,30 @@ class Swapper:
 
     FACE_SWAPPER = None
 
-    def __init__(self, source_path: str, target_path: str, sceneery_path: str):
+    # def __init__(self, source_path: str, target_path: str, sceneery_path: str):
+    def __init__(self):
         logger.info(f'Initiating {__name__} ')
-
-        source_path = source_path
-        target_path = target_path
-        sceneery_path = sceneery_path
 
         # if not __IS_PRE_CHECKED and Swapper.__pre_check():
         #     Swapper.__load_model()
 
         logger.info(f'Done Initiating {__name__} ')
+
+
+    def pre_check(self) -> Tuple[bool, str]:
+        message = 'Swapper pre-check is successful.'
+        if not Swapper.__IS_PRE_CHECKED:
+            try:
+                download_directory_path  = FileUtils.resolve_relative_path(CommonConfig.TARGETS_MODELS_DIR)
+                FileUtils.conditional_download(download_directory_path, [CommonConfig.SWAPPER_MODEL_URL])
+                Swapper.__IS_PRE_CHECKED = True
+            except Exception as e:
+                # Handle or log the exception
+                logger.error(f"Error during Swapper pre-check: {str(e)}")
+                Swapper.__IS_PRE_CHECKED = False
+                message = f'Swapper pre-check failed due to an error: {str(e)}'
+        return Swapper.__IS_PRE_CHECKED, message
+
 
     @classmethod
     def get_face_swapper(cls) -> Any:
@@ -41,6 +54,7 @@ class Swapper:
             logger.info('FACE_SWAPPER is not initialized. Loading model...')
             cls.__load_model()
         return cls.FACE_SWAPPER
+
 
     @staticmethod
     def __load_model() -> Any:
@@ -55,13 +69,6 @@ class Swapper:
                 )
         return Swapper.FACE_SWAPPER
     
-    @staticmethod
-    def __pre_check() -> bool:
-        if not Swapper.__IS_PRE_CHECKED:
-            download_directory_path = FileUtils.resolve_relative_path(CommonConfig.TARGETS_MODELS_DIR)
-            FileUtils.conditional_download(download_directory_path, [CommonConfig.SWAPPER_MODEL_URL])
-            Swapper.__IS_PRE_CHECKED = True
-        return Swapper.__IS_PRE_CHECKED
 
     #
     # def swap_face(source_face: Face, target_face: Face, temp_frame: Frame) -> Frame:

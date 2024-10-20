@@ -2,7 +2,7 @@
 from flask import Flask
 
 from faceSwapper.apis import faceSwapper_bp
-from faceSwapper.routes.FaceSwapper import faceSwapper_routes
+from faceSwapper.routes.FaceSwapperRoute import faceSwapper_routes
 from faceSwapper.commons.config import CommonConfig
 
 def create_app():

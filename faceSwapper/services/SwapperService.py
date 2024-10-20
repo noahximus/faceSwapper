@@ -86,7 +86,7 @@ def swap_faces_sync(
 
         # Call the externalized swap_single_face function for each pair of faces
         swapped_result = swap_single_face(i, source_faces, target_faces, source_gallery_order, target_gallery_order, result)
-        
+
         if swapped_result is not None:
             result = swapped_result  # Update the result image with the latest swap
         else:

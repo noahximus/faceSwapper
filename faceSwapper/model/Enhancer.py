@@ -3,9 +3,7 @@ import os
 import threading
 import insightface
 
-from typing import Any
-
-# import cv2
+from typing import Any, Tuple
 
 from gfpgan import GFPGANer
 
@@ -24,12 +22,8 @@ class Enhancer:
 
     IMAGE_ENHANCER = None
 
-    def __init__(self, source_path: str, target_path: str, sceneery_path: str):
+    def __init__(self):
         logger.info(f'Initiating {__name__} ')
-
-        source_path = source_path
-        target_path = target_path
-        sceneery_path = sceneery_path
 
         # if not __IS_PRE_CHECKED and Swapper.__pre_check():
         #     Swapper.__load_model()
@@ -57,10 +51,17 @@ class Enhancer:
                 )
         return Enhancer.IMAGE_ENHANCER
 
-    @staticmethod
-    def __pre_check() -> bool:
+
+    def pre_check(self) -> Tuple[bool, str]:
+        message = 'Enhancer pre-check is successful.'
         if not Enhancer.__IS_PRE_CHECKED:
-            download_directory_path = FileUtils.resolve_relative_path(CommonConfig.TARGETS_MODELS_DIR)
-            FileUtils.conditional_download(download_directory_path, [CommonConfig.ENHANCER_MODEL_URL])
-            Enhancer.__IS_PRE_CHECKED = True
-        return Enhancer.__IS_PRE_CHECKED
+            try:
+                download_directory_path  = FileUtils.resolve_relative_path(CommonConfig.TARGETS_MODELS_DIR)
+                FileUtils.conditional_download(download_directory_path, [CommonConfig.ENHANCER_MODEL_URL])
+                Enhancer.__IS_PRE_CHECKED = True
+            except Exception as e:
+                # Handle or log the exception
+                logger.error(f"Error during Enhancer pre-check: {str(e)}")
+                Enhancer.__IS_PRE_CHECKED = False
+                message = f'Enhancer pre-check failed due to an error: {str(e)}'
+        return Enhancer.__IS_PRE_CHECKED, message
