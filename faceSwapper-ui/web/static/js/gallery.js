@@ -234,6 +234,35 @@ function handleFileChange(event, type) {
     filenameDisplay.textContent = files.length > 0 ? files[0].name : '';
 }
 
+function handleFileChange2(event, previewElementId, filenameElementId) {
+    const file = event.target.files[0];  // Get the selected file from the event
+    const previewElement = document.getElementById(previewElementId);  // Target preview container
+    const filenameElement = document.getElementById(filenameElementId);  // Target filename display
+
+    // Clear previous content
+    previewElement.innerHTML = '';
+    filenameElement.innerText = file ? file.name : '';
+
+    if (!file) return;
+
+    // Determine file type (image or video)
+    const fileType = file.type.split('/')[0];
+
+    if (fileType === 'image') {
+        // Create image preview
+        const imgElement = document.createElement('img');
+        imgElement.src = URL.createObjectURL(file);
+        imgElement.style.maxWidth = "100%";  // Adjust as needed
+        previewElement.appendChild(imgElement);
+    } else if (fileType === 'video') {
+        // Create video preview
+        const videoElement = document.createElement('video');
+        videoElement.src = URL.createObjectURL(file);
+        videoElement.controls = true;
+        videoElement.style.maxWidth = "100%";  // Adjust as needed
+        previewElement.appendChild(videoElement);
+    }
+}
 
 // ================================
 // Initialization (from preparation.js)
@@ -242,11 +271,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // Attach the event listeners and use the reusable function
     document.getElementById('source').addEventListener('change', function(event) {
         handleFileChange(event, 'source');
+        // handleFileChange2(event, 'sourcePreview', 'sourceFilename');
     });
 
     document.getElementById('target').addEventListener('change', function(event) {
         handleFileChange(event, 'target');
+        // handleFileChange2(event, 'targetPreview', 'targetFilename');
     });
+
     makeImagesDraggable('sourceGallery');
     makeImagesDraggable('targetGallery');
 });

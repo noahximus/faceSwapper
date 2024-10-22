@@ -48,7 +48,7 @@ class ImageUploadResource(Resource):
             logger.debug(f'Extracting faces from image.')
             
             # Extract faces using the reusable extract_faces method
-            faces = GalleryService.extract_faces(img)
+            faces = GalleryService.extract_faces_from_image(img)
 
             logger.debug(f'There are {len(faces)} faces in the image.')
                     

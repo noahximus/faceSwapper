@@ -2,6 +2,7 @@
 import requests
 import numpy as np
 import cv2
+import os
 from io import BytesIO
 import base64
 import logging
@@ -56,7 +57,7 @@ def read_image_from_file_path(file_path):
 
     return image
 
-def extract_faces(image):
+def extract_faces_from_image(image):
     """Extract faces from the provided image and return them as a list of base64-encoded images."""
     faces = ANALYZER.get(image)
     faces = sorted(faces, key = lambda x : x.bbox[0])
@@ -98,3 +99,54 @@ def extract(file: FileStorage, uploadType: str|None) -> Tuple[Dict[str, Any], in
         "image_url": f'{CommonConfig.UPLOADS_URL}/{secure_filename(str(file.filename))}',
         "faces": faces,
     }, 200
+
+
+
+def extract_faces_from_video(video_file_path: str):
+    video_path = video_file_path
+    cap = cv2.VideoCapture(video_path)
+
+    # Initialize the face detector (can be dlib or OpenCV's CascadeClassifier)
+    face_cascade = cv2.CascadeClassifier(str(CommonConfig.TARGETS_MODELS_DIR.joinpath('haarcascade_frontalface_default.xml')))
+
+    frame_number = 0
+    extracted_faces = []
+
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break  # Exit when the video ends
+
+        frame_number += 1
+        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray_frame, scaleFactor=1.1, minNeighbors=5)
+
+        for (x, y, w, h) in faces:
+            face_image = frame[y:y + h, x:x + w]
+            extracted_faces.append(face_image)
+
+    cap.release()
+    cv2.destroyAllWindows()
+    return extracted_faces
+
+
+def reassemble_video(processed_frames_dir, output_video_path, frame_size, fps=24):
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    video_writer = cv2.VideoWriter(output_video_path, fourcc, fps, frame_size)
+
+    # List the processed frames in order
+    frame_files = sorted([f for f in os.listdir(processed_frames_dir) if f.endswith(".jpg")])
+
+    for frame_file in frame_files:
+        frame = cv2.imread(os.path.join(processed_frames_dir, frame_file))
+        video_writer.write(frame)
+
+    video_writer.release()
+    print(f"Video saved to {output_video_path}")
+
+
+
+# # Example usage:
+# video_path = "path/to/your/video.mp4"
+# output_dir = "extracted_faces"
+# extract_faces_from_video(video_path, output_dir)

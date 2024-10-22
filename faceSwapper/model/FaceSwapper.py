@@ -37,9 +37,7 @@ class FaceSwapper:
     def ffmpeg_checked(self) -> Tuple[bool, str]:
         ffmpeg_message = ''
         ffmpeg_checked = True
-        # if sys.version_info < (3, 9):
-        if sys.version_info < (3, 19):
-
+        if sys.version_info < (3, 9):
             ffmpeg_message = f'Python version {sys.version_info} is not supported - please upgrade to 3.9 or higher.'
             ffmpeg_checked = False
         return ffmpeg_checked, ffmpeg_message

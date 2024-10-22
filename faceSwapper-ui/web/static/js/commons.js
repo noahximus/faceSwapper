@@ -30,10 +30,28 @@
         files.forEach((file) => {
             const reader = new FileReader();
             reader.onload = function (event) {
-                const img = document.createElement('img');
-                img.src = event.target.result;
-                img.style.margin = '5px';
-                previewContainer.appendChild(img);
+            //     const img = document.createElement('img');
+            //     img.src = event.target.result;
+            //     img.style.margin = '5px';
+            //     previewContainer.appendChild(img);
+
+              const fileType = file.type.split('/')[0];
+
+              if (fileType === 'image') {
+                  // Create image preview
+                  const imgElement = document.createElement('img');
+                  imgElement.src = URL.createObjectURL(file);
+                  imgElement.style.maxWidth = "100%";  // Adjust as needed
+                  previewContainer.appendChild(imgElement);
+              } else if (fileType === 'video') {
+                  // Create video preview
+                  const videoElement = document.createElement('video');
+                  videoElement.src = URL.createObjectURL(file);
+                  videoElement.controls = true;
+                  videoElement.style.maxWidth = "100%";  // Adjust as needed
+                  previewContainer.appendChild(videoElement);
+              }
+
             };
             reader.readAsDataURL(file);
         });

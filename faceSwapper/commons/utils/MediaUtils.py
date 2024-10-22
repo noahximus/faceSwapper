@@ -42,6 +42,14 @@ def is_image_file(file):
 
     return is_true_image
 
+def is_image_or_video(file):
+    mime_type = file.mimetype
+    if mime_type.startswith('image'):
+        return 'image'
+    elif mime_type.startswith('video'):
+        return 'video'
+    else:
+        return 'unknown'
 
 # Function to convert the file to an OpenCV image
 def convert_file_to_opencv_image(file):
@@ -118,3 +126,9 @@ def base64_to_numpy(base64_string):
         raise ValueError("Image decoding failed")
     
     return image
+
+
+def encode_face_as_base64(face):
+    _, buffer = cv2.imencode('.jpg', face)  # Encode face as a JPEG image
+    face_base64 = base64.b64encode(buffer).decode('utf-8')  # Convert to base64 string
+    return face_base64

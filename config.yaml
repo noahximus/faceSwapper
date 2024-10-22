@@ -9,7 +9,8 @@ application:
       url: "/upload"
     face_uploads:
       url: "/uploads"
-    allowed_extensions: ['png', 'jpg', 'jpeg', 'gif']
+    allowed_extensions: ['png', 'jpg', 'jpeg', 'gif',
+                         'mp4', 'mov', 'avi', 'mkv']
 
   swapper:
     face_swap:
