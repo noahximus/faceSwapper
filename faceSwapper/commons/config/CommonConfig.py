@@ -21,7 +21,11 @@ APPLICATION_URL = CONFIGURATION['application']['url']
 # UPLOADS URL
 UPLOAD_URL =  CONFIGURATION['application']['uploader']['face_uploader']['url']
 UPLOADS_URL =  CONFIGURATION['application']['uploader']['face_uploads']['url']
+
+# SWAP URL
 SWAP_URL = CONFIGURATION['application']['swapper']['face_swap']['url']
+
+# ENHANCE URL
 ENHANCE_URL = CONFIGURATION['application']['enhancer']['face_enhance']['url']
 EXTRACT_URL = CONFIGURATION['application']['extractor']['face_extract']['url']
 
@@ -52,4 +56,8 @@ SWAPPER_MODEL_PATH =  TARGETS_MODELS_DIR.joinpath(SWAPPER_MODEL_NAME)
 ENHANCER_MODEL_URL = CONFIGURATION['application']['enhancer']['model']['url']
 ENHANCER_MODEL_NAME =  CONFIGURATION['application']['enhancer']['model']['name']
 ENHANCER_MODEL_PATH =  TARGETS_MODELS_DIR.joinpath(ENHANCER_MODEL_NAME)
+
+EXTRACT_COUNT = CONFIGURATION['application']['extractor']['face_extract']['count']
+VIDEO_SLICES = CONFIGURATION['application']['video']['slices']
+SKIPS_IN_SECS = CONFIGURATION['application']['video']['skips_in_s']
 

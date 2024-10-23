@@ -13,7 +13,7 @@ from typing import List
 from tqdm import tqdm
 
 
-logging.root.setLevel(logging.DEBUG)
+# logging.root.setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 def create_directory(dir_path: str) -> bool:

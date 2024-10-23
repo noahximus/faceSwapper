@@ -14,7 +14,7 @@ from faceSwapper.commons.utils import MediaUtils
 from faceSwapper.services import UploadService
 from faceSwapper.services import GalleryService
 
-logging.root.setLevel(logging.DEBUG)
+# logging.root.setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Define the namespace

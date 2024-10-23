@@ -10,7 +10,7 @@ from PIL import Image
 from faceSwapper.commons.config import CommonConfig
 from faceSwapper.commons.utils import FileUtils as FileUtils
 
-logging.root.setLevel(logging.DEBUG)
+# logging.root.setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
@@ -128,7 +128,109 @@ def base64_to_numpy(base64_string):
     return image
 
 
-def encode_face_as_base64(face):
+def encode_face_as_base64_old(face):
     _, buffer = cv2.imencode('.jpg', face)  # Encode face as a JPEG image
     face_base64 = base64.b64encode(buffer).decode('utf-8')  # Convert to base64 string
     return face_base64
+
+def encode_face_as_base64(face):
+    """
+    Encode a face image (NumPy array) as a base64 string.
+    Ensure the image is a valid NumPy array and has type uint8.
+    """
+    if face is None or face.size == 0:
+        raise ValueError("Cannot encode an empty or invalid image.")
+    
+    # Ensure the image is of type uint8
+    if face.dtype != np.uint8:
+        face = face.astype(np.uint8)
+
+    # Encode the face image into a base64 string
+    success, buffer = cv2.imencode('.jpg', face)
+    
+    if not success:
+        raise ValueError("Failed to encode image using imencode.")
+    
+    face_base64 = base64.b64encode(buffer).decode('utf-8')
+    return face_base64
+
+def get_frame_count(video_file_path):
+    # Open the video file
+    cap = cv2.VideoCapture(video_file_path)
+
+    # Check if the video was successfully opened
+    if not cap.isOpened():
+        raise ValueError(f"Error: Could not open video file {video_file_path}")
+
+    # Get the total number of frames in the video
+    frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
+    # Release the video capture object
+    cap.release()
+
+    return frame_count
+
+
+def jump_to_frame(video_file_path, position):
+    # Open the video file
+    cap = cv2.VideoCapture(video_file_path)
+    
+    if not cap.isOpened():
+        raise ValueError(f"Error: Could not open video file {video_file_path}")
+
+    # Get the total number of frames in the video
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    
+    # Calculate the halfway point
+    # halfway_frame = total_frames // 2
+
+    # Set the position to the halfway frame
+    cap.set(cv2.CAP_PROP_POS_FRAMES, position)
+
+    # Read the frame at the halfway point
+    ret, frame = cap.read()
+    
+    if ret:
+        # Display the halfway frame
+        cv2.imshow('Halfway Frame', frame)
+        cv2.waitKey(0)  # Wait until a key is pressed
+    else:
+        print("Error: Could not retrieve the frame.")
+    
+    # Release the video capture object and close display window
+    cap.release()
+    cv2.destroyAllWindows()
+
+def jump_to_frame_by_time(video_file_path, time_slice):
+    # Open the video file
+    cap = cv2.VideoCapture(video_file_path)
+
+    logger.debug(f'time_slice: {time_slice}')
+    
+    if not cap.isOpened():
+        raise ValueError(f"Error: Could not open video file {video_file_path}")
+
+    # Get the total duration of the video (in milliseconds)
+    total_duration = cap.get(cv2.CAP_PROP_POS_MSEC)
+    
+    # Calculate the halfway time (in milliseconds)
+    # target_time = total_duration * time_slice
+
+    # Set the position to the halfway time
+    cap.set(cv2.CAP_PROP_POS_MSEC, time_slice)
+
+    # Read the frame at the halfway point
+    ret, frame = cap.read()
+    
+    # if ret:
+    #     # Display the halfway frame
+    #     cv2.imshow('Halfway Frame by Time', frame)
+    #     cv2.waitKey(0)  # Wait until a key is pressed
+    # else:
+    #     print("Error: Could not retrieve the frame.")
+    
+    # Release the video capture object and close display window
+    cap.release()
+    cv2.destroyAllWindows()
+
+    return ret, frame

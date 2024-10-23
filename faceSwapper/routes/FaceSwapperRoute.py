@@ -12,7 +12,7 @@ from faceSwapper.commons.config import CommonConfig
 from faceSwapper.model.FaceSwapper import FaceSwapper
 from faceSwapper.model.Swapper import Swapper
 
-logging.root.setLevel(logging.DEBUG)
+# logging.root.setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Create a Blueprint for the SwapperAPI

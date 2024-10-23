@@ -10,7 +10,7 @@ from typing import Any, Tuple
 from faceSwapper.commons.config import CommonConfig
 from faceSwapper.commons.utils import FileUtils
 
-logging.root.setLevel(logging.DEBUG)
+# logging.root.setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 

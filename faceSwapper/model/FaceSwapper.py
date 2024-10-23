@@ -13,7 +13,7 @@ from faceSwapper.model.Enhancer import Enhancer
 FACE_SWAPPER = None
 THREAD_LOCK = threading.Lock()
 
-logging.root.setLevel(logging.DEBUG)
+# logging.root.setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 

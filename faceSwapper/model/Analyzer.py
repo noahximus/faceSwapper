@@ -3,7 +3,7 @@ import logging
 import insightface
 from insightface.app import FaceAnalysis
 
-logging.root.setLevel(logging.DEBUG)
+# logging.root.setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 assert insightface.__version__>='0.7'

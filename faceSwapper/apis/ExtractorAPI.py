@@ -18,7 +18,7 @@ from faceSwapper.services import UploadService
 # Define the namespace
 extractorAPI_routes = Namespace('extractor', description='Face Extractor operations')
 
-logging.root.setLevel(logging.DEBUG)
+# logging.root.setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Route to extract faces from file (images)
@@ -57,14 +57,16 @@ class FaceExtractResource(Resource):
 
                 # Save the uploaded video temporarily for processing
                 video_filename = secure_filename(str(file.filename))
-                video_file_path = f"/tmp/{video_filename}"  # Path to save the video temporarily
+                # video_file_path = f"{CommonConfig.UPLOADS_URL.joinpath('tmp').joinpath(video_filename)}"  # Path to save the video temporarily
+                video_file_path = f"/tmp/{secure_filename(str(file.filename))}"
                 file.save(video_file_path)
 
                 logger.debug(f'Extracting faces from video.')
-                faces = GalleryService.extract_faces_from_video(video_file_path)
+                # faces = GalleryService.extract_faces_from_video(video_file_path)
+                faces = GalleryService.extract_faces_from_video(str(video_file_path))
 
                 # Encode each face as base64 for JSON serialization
-                faces = [MediaUtils.encode_face_as_base64(face) for face in faces]
+                # faces = [GalleryService.encode_face_as_base64(face) for face in faces]
 
                 logger.debug(f'There are {len(faces)} faces in the video.')
                 # Optionally, delete the video file after processing if not needed
@@ -107,3 +109,4 @@ class FaceExtractResource(Resource):
 #
 # def allowed_file(filename, file_type):
 #     return filename.rsplit('.', 1)[1].lower() in ['mp4', 'mov', 'avi']  # Add other video formats if needed
+

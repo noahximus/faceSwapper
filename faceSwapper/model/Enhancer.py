@@ -10,7 +10,7 @@ from gfpgan import GFPGANer
 from faceSwapper.commons.config import CommonConfig
 from faceSwapper.commons.utils import FileUtils
 
-logging.root.setLevel(logging.DEBUG)
+# logging.root.setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Set the cache directory for GFPGAN model downloads

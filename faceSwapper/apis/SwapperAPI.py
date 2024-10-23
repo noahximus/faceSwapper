@@ -9,7 +9,7 @@ from flask_restx import Namespace, Resource
 
 from faceSwapper.services import SwapperService
 
-logging.root.setLevel(logging.DEBUG)
+# logging.root.setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Define the namespace

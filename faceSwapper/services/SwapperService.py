@@ -14,7 +14,7 @@ from faceSwapper.model.Analyzer import Analyzer
 from faceSwapper.model.Swapper import Swapper
 from faceSwapper.commons.utils import MediaUtils
 
-logging.root.setLevel(logging.DEBUG)
+# logging.root.setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 ANALYZER = Analyzer.FACE_ANALYZER
