@@ -55,7 +55,7 @@ class ImageUploadResource(Resource):
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
-        if not MediaUtils.is_image_file(file_path):
+        if not MediaUtils.is_file_in_path_image(str(file_path)):
             return jsonify({"error": "Uploaded file is not a valid image"}), 400
 
         return jsonify({

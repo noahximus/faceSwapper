@@ -32,5 +32,4 @@ application:
       count: 2
 
   video:
-    slices: 10
     skips_in_s: 3

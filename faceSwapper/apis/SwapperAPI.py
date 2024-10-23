@@ -7,6 +7,7 @@ from typing import Dict, Tuple
 from flask import request
 from flask_restx import Namespace, Resource
 
+from faceSwapper.commons.utils import MediaUtils
 from faceSwapper.services import SwapperService
 
 # logging.root.setLevel(logging.DEBUG)
@@ -19,7 +20,6 @@ swapperAPI_routes = Namespace('swapper', description='Face Swapper operations')
 @swapperAPI_routes.route('/swap')
 class FaceSwapResource(Resource):
     def post(self) -> Tuple[Dict[str, str], int]:
-        # logger = logging.getLogger(__name__)
         start_time = time.time()
         logger.debug(f'FaceSwap START')
 
@@ -53,13 +53,18 @@ class FaceSwapResource(Resource):
 
             # Perform face swapping using the files and faces
             try:
-                result = SwapperService.swap_faces_sync(
-                    source_file, source_gallery_order,
-                    target_file, target_gallery_order
-                )
+                result = ''
+                if MediaUtils.is_image(target_file):
+                    result = SwapperService.swap_faces_sync(
+                        source_file, source_gallery_order,
+                        target_file, target_gallery_order
+                    )
+                elif MediaUtils.is_video(target_file):
+                    logger.debug(f'Face Swapping to Video is not yet implmented')
+
                 logger.debug(f"Done with SWAPPING")
-                
                 response = { 'image': f'{result}' }, 200
+
             except Exception as e:
                 logger.error(f'Face swapping failed: {str(e)}')
                 response = {'error': f'Face swapping failed: {str(e)}'}, 500

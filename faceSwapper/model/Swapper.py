@@ -8,6 +8,7 @@ from typing import Any, Tuple
 # import cv2
 
 from faceSwapper.commons.config import CommonConfig
+from faceSwapper.commons.utils import CommonUtils
 from faceSwapper.commons.utils import FileUtils
 
 # logging.root.setLevel(logging.DEBUG)
@@ -35,7 +36,7 @@ class Swapper:
         if not Swapper.__IS_PRE_CHECKED:
             try:
                 download_directory_path  = FileUtils.resolve_relative_path(CommonConfig.TARGETS_MODELS_DIR)
-                FileUtils.conditional_download(download_directory_path, [CommonConfig.SWAPPER_MODEL_URL])
+                CommonUtils.conditional_download(download_directory_path, [CommonConfig.SWAPPER_MODEL_URL])
                 Swapper.__IS_PRE_CHECKED = True
             except Exception as e:
                 # Handle or log the exception

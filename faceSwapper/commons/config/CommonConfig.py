@@ -58,6 +58,5 @@ ENHANCER_MODEL_NAME =  CONFIGURATION['application']['enhancer']['model']['name']
 ENHANCER_MODEL_PATH =  TARGETS_MODELS_DIR.joinpath(ENHANCER_MODEL_NAME)
 
 EXTRACT_COUNT = CONFIGURATION['application']['extractor']['face_extract']['count']
-VIDEO_SLICES = CONFIGURATION['application']['video']['slices']
 SKIPS_IN_SECS = CONFIGURATION['application']['video']['skips_in_s']
 

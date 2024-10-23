@@ -18,7 +18,6 @@ from faceSwapper.services import UploadService
 # Define the namespace
 extractorAPI_routes = Namespace('extractor', description='Face Extractor operations')
 
-# logging.root.setLevel(logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Route to extract faces from file (images)
@@ -37,39 +36,22 @@ class FaceExtractResource(Resource):
             logger.error(f'No valid file.')
             return {'error': 'No valid file.'}, 400
 
-        fileType = MediaUtils.is_image_or_video(file)
         faces = []
-
         try:
-            if fileType == 'image':
+            if MediaUtils.is_image(file):
+
                 logger.debug(f'Reading image from file.')
-
-                # Convert the uploaded file to an OpenCV image
-                img = GalleryService.read_image_from_file(file)
-
-                logger.debug(f'Extracting faces from image.')
+                img = GalleryService.read_image_from_file(file) # Convert the uploaded file to an OpenCV image
                 faces = GalleryService.extract_faces_from_image(img)
-
                 logger.debug(f'There are {len(faces)} faces in the image.')
 
-            elif fileType == 'video':
-                logger.debug(f'Reading video from file.')
+            elif MediaUtils.is_video(file):
 
-                # Save the uploaded video temporarily for processing
-                video_filename = secure_filename(str(file.filename))
-                # video_file_path = f"{CommonConfig.UPLOADS_URL.joinpath('tmp').joinpath(video_filename)}"  # Path to save the video temporarily
+                logger.debug(f'Reading video from file.')
                 video_file_path = f"/tmp/{secure_filename(str(file.filename))}"
                 file.save(video_file_path)
-
-                logger.debug(f'Extracting faces from video.')
-                # faces = GalleryService.extract_faces_from_video(video_file_path)
                 faces = GalleryService.extract_faces_from_video(str(video_file_path))
-
-                # Encode each face as base64 for JSON serialization
-                # faces = [GalleryService.encode_face_as_base64(face) for face in faces]
-
                 logger.debug(f'There are {len(faces)} faces in the video.')
-                # Optionally, delete the video file after processing if not needed
 
             else:
                 logger.error(f'Unsupported file type.')
@@ -85,28 +67,4 @@ class FaceExtractResource(Resource):
             "image_url": f'{CommonConfig.UPLOADS_URL}/{secure_filename(str(file.filename))}',
             "faces": faces,
         }, 200
-
-
-# from flask import request, jsonify
-#
-# @app.route('/upload', methods=['POST'])
-# def upload_file():
-#     if 'videoFile' not in request.files:
-#         return jsonify({'error': 'No video file uploaded'})
-#
-#     video_file = request.files['videoFile']
-#
-#     if video_file and allowed_file(video_file.filename, ['video']):
-#         video_path = os.path.join(UPLOAD_FOLDER, video_file.filename)
-#         video_file.save(video_path)
-#
-#         # Call your face extraction function
-#         output_dir = "extracted_faces"
-#         extract_faces_from_video(video_path, output_dir)
-#
-#         return jsonify({'success': 'Video processed and faces extracted'})
-#     return jsonify({'error': 'Invalid file type'})
-#
-# def allowed_file(filename, file_type):
-#     return filename.rsplit('.', 1)[1].lower() in ['mp4', 'mov', 'avi']  # Add other video formats if needed
 

@@ -1,6 +1,4 @@
 import os
-import cv2
-import base64
 import logging
 import traceback
 
@@ -9,7 +7,6 @@ import numpy as np
 
 from typing import Tuple, List
 
-from faceSwapper.commons.config import CommonConfig
 from faceSwapper.model.Analyzer import Analyzer
 from faceSwapper.model.Swapper import Swapper
 from faceSwapper.commons.utils import MediaUtils
@@ -48,8 +45,8 @@ def process_face_swap(
     """Common logic for face swapping between source and target images."""
 
     # Convert files to OpenCV images
-    source_img = MediaUtils.convert_file_to_cv2_image(source_file)
-    target_img = MediaUtils.convert_file_to_cv2_image(target_file)
+    source_img = MediaUtils.convert_base64_to_cv2_image(source_file)
+    target_img = MediaUtils.convert_base64_to_cv2_image(target_file)
 
     # Detect faces in both source and target images
     source_faces = ANALYZER.get(source_img)
@@ -81,9 +78,6 @@ def swap_faces_sync(
     )
     result = target_img
     for i in range(face_count_to_swap):
-        logger.debug(f'sourceGalleryOrder[{i}] is {source_gallery_order[i]}')
-        logger.debug(f'targetGalleryOrder[{i}] is {target_gallery_order[i]}')
-
         # Call the externalized swap_single_face function for each pair of faces
         swapped_result = swap_single_face(i, source_faces, target_faces, source_gallery_order, target_gallery_order, result)
 
@@ -92,7 +86,8 @@ def swap_faces_sync(
         else:
             logger.error(f'Skipping face [{i}] due to error during face swapping')
 
-    return MediaUtils.convert_to_base64(result)
+    return MediaUtils.convert_cv2_image_to_base64_URI_string(result)
+    # return MediaUtils.convert_to_base64(result)
 
 
 def choose_executor(use_process_pool):
@@ -146,7 +141,7 @@ def swap_faces_async(
                 logger.error(f'Skipping update for face [{i}] due to error')
 
     # Convert the final result to a base64 image and return it
-    return MediaUtils.convert_to_base64(result)
+    return MediaUtils.convert_cv2_image_to_base64(result)
 
 
 
